@@ -10,3 +10,4 @@ Unreleased Changes
 <!-- insertion marker -->
 - Initial structure
 - Initial CLI structure in place
+- Added moin wiki user parser

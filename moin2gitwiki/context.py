@@ -3,6 +3,8 @@ import sys
 
 import attr
 
+from .users import Moin2GitUserSet
+
 
 CONSOLE_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s",
@@ -10,9 +12,11 @@ CONSOLE_FORMATTER = logging.Formatter(
 SYSLOG_FORMATTER = logging.Formatter("%(name)s: [%(levelname)s] %(message)s")
 
 
-@attr.s
+@attr.s(kw_only=True, slots=True)
 class Moin2GitContext:
     logger: logging.Logger = attr.ib()
+    moin_data: str = attr.ib()
+    users: Moin2GitUserSet = attr.ib(default=None)
     syslog: bool = attr.ib(default=False)
     debug: bool = attr.ib(default=False)
     verbose: bool = attr.ib(default=False)
@@ -22,7 +26,26 @@ class Moin2GitContext:
         if "logger" not in kwargs:
             logger = logging.getLogger("moin2gitwiki")
             kwargs["logger"] = logger
-        return cls(**kwargs)
+        if "user_map" in kwargs:
+            user_map = kwargs["user_map"]
+            del kwargs["user_map"]
+
+        context = cls(**kwargs)
+        context.configure_logger()
+        #
+        # get the users
+        if user_map is not None:
+            context.users = Moin2GitUserSet.load_users_from_file(
+                path=user_map,
+                logger=context.logger,
+            )
+        else:
+            context.users = Moin2GitUserSet.load_users_from_wiki_data(
+                wiki_data_path=context.moin_data,
+                logger=context.logger,
+            )
+        #
+        return context
 
     def configure_logger(self):
         logger = self.logger
