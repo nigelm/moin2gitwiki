@@ -9,3 +9,4 @@ Unreleased Changes
 
 <!-- insertion marker -->
 - Initial structure
+- Initial CLI structure in place
