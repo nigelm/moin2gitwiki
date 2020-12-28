@@ -1,0 +1,41 @@
+site_name: hutchlink
+site_description: "Link tweets to a page via RSS"
+site_url: ""
+repo_url: ""
+repo_name: "hutchlink"
+
+nav:
+  - Overview: index.md
+  - Commands: commands.md
+  - Changelog: changelog.md
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.expand
+
+extra_css:
+  - css/mkdocstrings.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      linenums_style: pymdownx.inline
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - markdown_include.include
+  - mkdocs-click
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+          selection:
+            new_path_syntax: yes
+      watch:
+        - hutchlink
+# end

@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "moin2gitwiki"
+version = "0.1.0"
+description = "MoinMoin To Git (Markdown) Wiki Converter"
+authors = ["Nigel Metheringham <nigelm@cpan.org>"]
+readme = "README.md"
+include = [
+    "CHANGELOG.md",
+    "README.md",
+    "tests/*",
+    "docs/*"
+]
+exclude = [
+    "**/__pycache__",
+    "**/*.py[oc]"
+]
+
+[tool.poetry.scripts]
+moin2gitwiki = "moin2gitwiki.cli:moin2gitwiki"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^7.1.2"
+attrs = "^20.3.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.0"
+pytest-runner = "^5.2"
+bump2version = "^1.0.1"
+mkdocs = "^1.1.2"
+mkdocs-material = "^6.1.7"
+mkdocstrings = "^0.13.6"
+markdown-include = "^0.6.0"
+mkdocs-click = "^0.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
