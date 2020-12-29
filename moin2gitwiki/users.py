@@ -17,11 +17,11 @@ class Moin2GitUser:
             data = f.read()
         moin_id = os.path.basename(path)
         user_dict = dict(re.findall(r"^([a-z_]+)=(.*)$", data, flags=re.MULTILINE))
-        logger.debug(f"User data: {user_dict}")
         params = {"moin_id": moin_id, "moin_name": user_dict["name"]}
         if user_dict["email"] is not None and user_dict["email"] != "":
-            params["email"] = user_dict["email"]
+            params["email"] = re.sub("[^A-Za-z0-9@._-]", "", user_dict["email"])
         user = cls(**params)
+        logger.debug(f"User added: {user.moin_name}")
         return user
 
 
