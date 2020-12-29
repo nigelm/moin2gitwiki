@@ -13,7 +13,8 @@ class Moin2GitUser:
 
     @classmethod
     def load_user_from_file(cls, path, logger):
-        data = open(path).read()
+        with open(path) as f:
+            data = f.read()
         moin_id = os.path.basename(path)
         user_dict = dict(re.findall(r"^([a-z_]+)=(.*)$", data, flags=re.MULTILINE))
         logger.debug(f"User data: {user_dict}")
@@ -71,7 +72,8 @@ class Moin2GitUserSet:
     @classmethod
     def load_users_from_file(cls, path, logger):
         logger.debug(f"Loading wiki users from {path}")
-        user_data_set = json.loads(open(path).read())
+        with open(path) as f:
+            user_data_set = json.loads(f.read())
         users = []
         for entry in user_data_set:
             user = Moin2GitUser(**entry)
