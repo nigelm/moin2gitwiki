@@ -12,3 +12,4 @@ Unreleased Changes
 - Initial CLI structure in place
 - Added moin wiki user parser
 - Added moin revision parser
+- Added basic git fast-import data output - outputs moin markup

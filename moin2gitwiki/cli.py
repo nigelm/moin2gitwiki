@@ -2,6 +2,7 @@ import click
 
 from . import __version__
 from .context import Moin2GitContext
+from .gitrevision import GitExportStream
 from .wikiindex import MoinEditEntries
 
 
@@ -77,6 +78,22 @@ def list_revisions(ctx):
     """List all the revisions in the wiki"""
     revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
     print(revisions)
+
+
+# -----------------------------------------------------------------------
+@moin2gitwiki.command()
+@click.argument("output", type=click.File("wb"))
+@click.pass_obj
+def fast_export(ctx, output):
+    """Git fast-export all the revisions in the wiki"""
+    revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
+    export = GitExportStream(output=output, ctx=ctx)
+    for revision in revisions.entries:
+        export.add_wiki_revision(
+            revision=revision,
+            content=revision.wiki_content_bytes(),
+        )
+    export.end_stream()
 
 
 # -----------------------------------------------------------------------

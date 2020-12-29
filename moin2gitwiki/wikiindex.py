@@ -26,14 +26,24 @@ class MoinEditEntry:
             "pages",
             self.page_path,
             "revisions",
-            self.page.revision,
+            self.page_revision,
         )
+
+    def wiki_content_bytes(self):
+        lines = self.wiki_content()
+        if lines is None:
+            return lines
+        else:
+            return "".join(lines).encode("utf-8")
 
     def wiki_content(self):
         lines = []
-        with open(self.wiki_content_path()) as f:
-            for line in f:
-                lines.append(self.pre_process_line(line))
+        try:
+            with open(self.wiki_content_path()) as f:
+                for line in f:
+                    lines.append(self.pre_process_line(line))
+        except OSError:
+            lines = None
         return lines
 
     def pre_process_line(self, line: str):
@@ -68,18 +78,20 @@ class MoinEditEntries:
                 # extract the fields out the edit entry
                 edit_fields = edit_line.rstrip("\n").split("\t")
                 edit_date = epoch + timedelta(microseconds=int(edit_fields[0]))
-                entry = MoinEditEntry(
-                    edit_date=edit_date,
-                    page_revision=edit_fields[1],
-                    edit_type=edit_fields[2],
-                    page_name=edit_fields[3],
-                    attachment=edit_fields[7],
-                    comment=edit_fields[8],
-                    page_path=page,
-                    user=ctx.users.get_user_by_id_or_anonymous(edit_fields[6]),
-                    ctx=ctx,
-                )
-                entries.append(entry)
+                edit_type = edit_fields[2]
+                if edit_type in ("SAVENEW", "SAVE"):
+                    entry = MoinEditEntry(
+                        edit_date=edit_date,
+                        page_revision=edit_fields[1],
+                        edit_type=edit_type,
+                        page_name=edit_fields[3],
+                        attachment=edit_fields[7],
+                        comment=edit_fields[8],
+                        page_path=page,
+                        user=ctx.users.get_user_by_id_or_anonymous(edit_fields[6]),
+                        ctx=ctx,
+                    )
+                    entries.append(entry)
         ctx.logger.debug("Sorting edit entries")
         entries.sort(key=lambda x: x.edit_date)
         ctx.logger.debug("Building edit entries object")
