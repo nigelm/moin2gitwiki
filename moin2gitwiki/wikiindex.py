@@ -18,6 +18,26 @@ class MoinEditEntry:
     attachment: str = attr.ib(default="")
     comment: str = attr.ib(default="")
     user: Moin2GitUser = attr.ib()
+    ctx: object = attr.ib(repr=False)
+
+    def wiki_content_path(self):
+        return os.path.join(
+            self.ctx.moin_data,
+            "pages",
+            self.page_path,
+            "revisions",
+            self.page.revision,
+        )
+
+    def wiki_content(self):
+        lines = []
+        with open(self.wiki_content_path()) as f:
+            for line in f:
+                lines.append(self.pre_process_line(line))
+        return lines
+
+    def pre_process_line(self, line: str):
+        return line
 
 
 @attr.s(kw_only=True, frozen=True, slots=True)
