@@ -11,3 +11,4 @@ Unreleased Changes
 - Initial structure
 - Initial CLI structure in place
 - Added moin wiki user parser
+- Added moin revision parser

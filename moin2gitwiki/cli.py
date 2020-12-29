@@ -2,6 +2,7 @@ import click
 
 from . import __version__
 from .context import Moin2GitContext
+from .wikiindex import MoinEditEntries
 
 
 # -----------------------------------------------------------------------
@@ -67,6 +68,19 @@ def check(ctx):
 def save_users(ctx, filename):
     """Write the user map out to a file"""
     ctx.users.save_users_to_file(filename)
+
+
+# -----------------------------------------------------------------------
+@moin2gitwiki.command()
+@click.pass_obj
+def list_revisions(ctx):
+    """List all the revisions in the wiki"""
+    revisions = MoinEditEntries.create_edit_entries(
+        wiki_data_path=ctx.moin_data,
+        users=ctx.users,
+        logger=ctx.logger,
+    )
+    print(revisions)
 
 
 # -----------------------------------------------------------------------

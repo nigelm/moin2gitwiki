@@ -9,7 +9,7 @@ import attr
 class Moin2GitUser:
     moin_id: str = attr.ib()
     moin_name: str = attr.ib()
-    email: str = attr.ib(default="user@example.com")
+    email: str = attr.ib(default="user@example.org")
 
     @classmethod
     def load_user_from_file(cls, path, logger):
@@ -36,6 +36,16 @@ class Moin2GitUserSet:
         for user in users:
             id_map[user.moin_id] = user
             name_map[user.moin_name] = user
+        # make sure we have an anonymous entry for things we cannot put a user to
+        if "anonymous" not in name_map:
+            anonymous = Moin2GitUser(
+                moin_id="0000000000.00.00000",
+                moin_name="anonymous",
+                email="anonymous@example.org",
+            )
+            id_map[anonymous.moin_id] = anonymous
+            name_map[anonymous.moin_name] = anonymous
+        # package all the users into a set
         logger.debug("Building user set object")
         return cls(id_map=id_map, name_map=name_map)
 
@@ -79,8 +89,14 @@ class Moin2GitUserSet:
     def get_user_by_name(self, name):
         return self.name_map[name]
 
-    def get_user_by_id(self, id):
-        return self.id_map[id]
+    def get_user_by_id(self, ident):
+        return self.id_map[ident]
+
+    def get_user_by_id_or_anonymous(self, ident):
+        if ident is None or ident not in self.id_map:
+            return self.get_user_by_name("anonymous")
+        else:
+            return self.get_user_by_id(ident)
 
 
 # end
