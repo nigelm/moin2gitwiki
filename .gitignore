@@ -118,11 +118,13 @@ GitHub.sublime-settings
 !.vscode/extensions.json
 .history
 
-# Do not package the static files - created on build
-cdr_management/static
-
 # Mac funnies
 .DS_Store
 .anaconda
+
+# specials
+*.dat
+*.json
+_cache
 
 # end

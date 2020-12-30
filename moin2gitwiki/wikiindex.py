@@ -10,6 +10,18 @@ from .users import Moin2GitUser
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntry:
+    moin_macro_pattern = re.compile(
+        r"""
+                (?:\<\<|\[\[)                           # opening part
+                (?P<macroname>  [A-Za-z0-9]+        )   # macro name
+                \(                                      # opening parens
+                (?P<params>     [^\]]*              )   # parameters
+                \)                                      # closing parens
+                (?:\>\>|\]\])                           # closing part
+                """,
+        re.VERBOSE,
+    )
+
     edit_date: datetime = attr.ib()
     page_revision: str = attr.ib()
     edit_type: str = attr.ib()
@@ -18,7 +30,7 @@ class MoinEditEntry:
     attachment: str = attr.ib(default="")
     comment: str = attr.ib(default="")
     user: Moin2GitUser = attr.ib()
-    ctx: object = attr.ib(repr=False)
+    ctx = attr.ib(repr=False)
 
     def wiki_content_path(self):
         return os.path.join(
@@ -41,19 +53,41 @@ class MoinEditEntry:
         try:
             with open(self.wiki_content_path()) as f:
                 for line in f:
-                    lines.append(self.pre_process_line(line))
+                    lines.extend(self.pre_process_line(line))
         except OSError:
             lines = None
         return lines
 
+    def unescape(self, thing):
+        return thing.replace("(2f)", "/")
+
     def pre_process_line(self, line: str):
-        return line
+        # handle macro inserts
+        match = re.search(self.moin_macro_pattern, line)
+        if match is not None:
+            return self.process_macro(
+                line,
+                macro_name=match.group("macroname"),
+                params=match.group("params"),
+            )
+        return [line]
+
+    def process_macro(self, line: str, macro_name: str, params: str):
+        if macro_name == "IncludeUrlContentWiki":
+            return self.process_include_url_content_wiki(params=params)
+        else:
+            self.ctx.logger.warning(f"Unknown macro {macro_name}")
+            return [line]
+
+    def process_include_url_content_wiki(self, params: str):
+        url = params.strip().replace("%s", self.unescape(self.page_name))
+        return self.ctx.cache.fetch(url)
 
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntries:
     entries: list = attr.ib()
-    ctx: object = attr.ib(repr=False)
+    ctx = attr.ib(repr=False)
 
     @classmethod
     def create_edit_entries(cls, ctx):

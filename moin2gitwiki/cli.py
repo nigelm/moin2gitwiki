@@ -21,9 +21,14 @@ from .wikiindex import MoinEditEntries
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
     envvar="MOIN2GIT_USERS",
 )
+@click.option(
+    "--cache",
+    type=click.Path(exists=False, file_okay=True, dir_okay=False),
+    envvar="MOIN2GIT_CACHE",
+)
 @click.version_option(__version__)
 @click.pass_context
-def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
+def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map, cache):
     """MoinMoin To Git Wiki Tools Command Line Utility
 
     The other global options are related to the logging setup.
@@ -36,6 +41,8 @@ def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
     - `--verbose` - `MOIN2GIT_VERBOSE` - Output verbose logging
     - `--syslog` - `MOIN2GIT_SYSLOG` - Send logging to syslog
     - `--moin-data` - `MOIN2GIT_DATA` - Data directory for moin
+    - `--user-map` - `MOIN2GIT_USERS` - User map for moin
+    - `--cache` - `MOIN2GIT_CACHE` - Directory for moin component fetches
 
     #### Help
 
@@ -49,6 +56,7 @@ def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
         verbose=verbose,
         moin_data=moin_data,
         user_map=user_map,
+        cache=cache,
     )
 
 

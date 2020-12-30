@@ -13,3 +13,4 @@ Unreleased Changes
 - Added moin wiki user parser
 - Added moin revision parser
 - Added basic git fast-import data output - outputs moin markup
+- Added fetch cache and initial macro handling

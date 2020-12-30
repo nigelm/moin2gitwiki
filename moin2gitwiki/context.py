@@ -1,8 +1,10 @@
 import logging.handlers
+import os
 import sys
 
 import attr
 
+from .fetch_cache import FetchCache
 from .users import Moin2GitUserSet
 
 
@@ -16,6 +18,7 @@ SYSLOG_FORMATTER = logging.Formatter("%(name)s: [%(levelname)s] %(message)s")
 class Moin2GitContext:
     logger: logging.Logger = attr.ib()
     moin_data: str = attr.ib()
+    cache: str = attr.ib(default=None)
     users: Moin2GitUserSet = attr.ib(default=None)
     syslog: bool = attr.ib(default=False)
     debug: bool = attr.ib(default=False)
@@ -29,7 +32,23 @@ class Moin2GitContext:
         if "user_map" in kwargs:
             user_map = kwargs["user_map"]
             del kwargs["user_map"]
-
+        #
+        # make the paths absolute
+        kwargs["moin_data"] = os.path.abspath(kwargs["moin_data"])
+        #
+        # build a fetch cache object
+        if "cache" in kwargs:
+            cache = (
+                os.path.abspath(kwargs["cache"])
+                if kwargs["cache"] is not None
+                else "_cache"
+            )
+            del kwargs["cache"]
+        else:
+            cache = "_cache"
+        cache_directory = os.path.abspath(cache)
+        #
+        # build the context object
         context = cls(**kwargs)
         context.configure_logger()
         #
@@ -44,6 +63,12 @@ class Moin2GitContext:
                 wiki_data_path=context.moin_data,
                 logger=context.logger,
             )
+        #
+        # Build a fetch cache
+        context.cache = FetchCache.initialise_cache(
+            cache_directory=cache_directory,
+            ctx=context,
+        )
         #
         return context
 
