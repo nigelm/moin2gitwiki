@@ -134,5 +134,8 @@ class MoinEditEntries:
             ctx=ctx,
         )
 
+    def count(self) -> int:
+        return len(self.entries)
+
 
 # end

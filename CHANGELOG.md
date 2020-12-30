@@ -14,3 +14,4 @@ Unreleased Changes
 - Added moin revision parser
 - Added basic git fast-import data output - outputs moin markup
 - Added fetch cache and initial macro handling
+- Directly commit into a new git instance

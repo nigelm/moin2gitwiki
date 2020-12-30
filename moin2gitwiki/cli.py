@@ -1,3 +1,7 @@
+import os
+import subprocess
+from pathlib import Path
+
 import click
 
 from . import __version__
@@ -90,18 +94,36 @@ def list_revisions(ctx):
 
 # -----------------------------------------------------------------------
 @moin2gitwiki.command()
-@click.argument("output", type=click.File("wb"))
+@click.argument(
+    "destination",
+    type=click.Path(exists=False, file_okay=False, dir_okay=True),
+)
 @click.pass_obj
-def fast_export(ctx, output):
+def fast_export(ctx, destination):
     """Git fast-export all the revisions in the wiki"""
+    # cwd = Path.cwd()
+    destination = Path(destination)
+    if destination.exists():
+        raise SystemExit(f"Destination path {destination} already exists.")
+    # build your initial revision set from the wiki data
     revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
-    export = GitExportStream(output=output, ctx=ctx)
-    for revision in revisions.entries:
-        export.add_wiki_revision(
-            revision=revision,
-            content=revision.wiki_content_bytes(),
-        )
-    export.end_stream()
+    click.echo(click.style(f"Read {revisions.count()} wiki revisions", fg="green"))
+    #
+    # build the output git instance
+    destination.mkdir(mode=0o755)
+    os.chdir(destination)
+    subprocess.run(["git", "init"])
+    with subprocess.Popen(["git", "fast-import"], stdin=subprocess.PIPE) as gitstream:
+        export = GitExportStream(output=gitstream.stdin, ctx=ctx)
+        for revision in revisions.entries:
+            page_name = revision.page_name + ".md"  # Markdown extension for page names
+            export.add_wiki_revision(
+                revision=revision,
+                content=revision.wiki_content_bytes(),
+                name=page_name,
+            )
+        export.end_stream()
+    subprocess.run(["git", "gc", "--aggressive"])  # pack it
 
 
 # -----------------------------------------------------------------------
