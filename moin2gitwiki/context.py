@@ -7,6 +7,10 @@ import attr
 from .users import Moin2GitUserSet
 
 
+LOG_FILE = "moin2gitwiki.log"
+FILE_FORMATTER = logging.Formatter(
+    "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s",
+)
 CONSOLE_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s",
 )
@@ -52,6 +56,21 @@ class Moin2GitContext:
         #
         return context
 
+    def get_file_handler(self) -> logging.handlers.TimedRotatingFileHandler:
+        """
+        Sets up and returns the file logging handler
+
+        Returns:
+            file_handler: logger file handler
+        """
+        file_handler = logging.handlers.TimedRotatingFileHandler(
+            LOG_FILE,
+            when="midnight",
+        )
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(FILE_FORMATTER)
+        return file_handler
+
     def configure_logger(self):
         logger = self.logger
         logger.setLevel(logging.DEBUG)
@@ -76,6 +95,7 @@ class Moin2GitContext:
             syslog_handler.setLevel(logging.DEBUG)
             syslog_handler.setFormatter(SYSLOG_FORMATTER)
             logger.addHandler(syslog_handler)
+        logger.addHandler(self.get_file_handler())
 
 
 # end
