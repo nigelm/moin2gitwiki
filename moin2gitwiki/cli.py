@@ -7,6 +7,7 @@ import click
 from . import __version__
 from .context import Moin2GitContext
 from .gitrevision import GitExportStream
+from .moin2markdown import Moin2Markdown
 from .wikiindex import MoinEditEntries
 
 
@@ -25,14 +26,9 @@ from .wikiindex import MoinEditEntries
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
     envvar="MOIN2GIT_USERS",
 )
-@click.option(
-    "--cache",
-    type=click.Path(exists=False, file_okay=True, dir_okay=False),
-    envvar="MOIN2GIT_CACHE",
-)
 @click.version_option(__version__)
 @click.pass_context
-def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map, cache):
+def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
     """MoinMoin To Git Wiki Tools Command Line Utility
 
     The other global options are related to the logging setup.
@@ -60,7 +56,6 @@ def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map, cache):
         verbose=verbose,
         moin_data=moin_data,
         user_map=user_map,
-        cache=cache,
     )
 
 
@@ -94,13 +89,23 @@ def list_revisions(ctx):
 
 # -----------------------------------------------------------------------
 @moin2gitwiki.command()
+@click.option(
+    "--cache-directory",
+    default="_cache",
+    envvar="MOIN2GIT_CACHE",
+)
 @click.argument(
     "destination",
     type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
 @click.pass_obj
-def fast_export(ctx, destination):
+def fast_export(ctx, cache_directory, destination):
     """Git fast-export all the revisions in the wiki"""
+    # build the translator
+    translator = Moin2Markdown.create_translator(
+        ctx=ctx,
+        cache_directory=Path(cache_directory),
+    )
     # cwd = Path.cwd()
     destination = Path(destination)
     if destination.exists():
@@ -117,13 +122,15 @@ def fast_export(ctx, destination):
         export = GitExportStream(output=gitstream.stdin, ctx=ctx)
         for revision in revisions.entries:
             page_name = revision.page_name + ".md"  # Markdown extension for page names
+            content = translator.retrieve_and_translate(revision=revision)
             export.add_wiki_revision(
                 revision=revision,
-                content=revision.wiki_content_bytes(),
+                content=content,
                 name=page_name,
             )
         export.end_stream()
     subprocess.run(["git", "gc", "--aggressive"])  # pack it
+    subprocess.run(["git", "checkout", "master"])  # check out the data
 
 
 # -----------------------------------------------------------------------

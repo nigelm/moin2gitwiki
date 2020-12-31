@@ -52,36 +52,13 @@ class MoinEditEntry:
         lines = []
         try:
             with open(self.wiki_content_path()) as f:
-                for line in f:
-                    lines.extend(self.pre_process_line(line))
+                lines = f.readlines()
         except OSError:
             lines = None
         return lines
 
     def unescape(self, thing):
         return thing.replace("(2f)", "/")
-
-    def pre_process_line(self, line: str):
-        # handle macro inserts
-        match = re.search(self.moin_macro_pattern, line)
-        if match is not None:
-            return self.process_macro(
-                line,
-                macro_name=match.group("macroname"),
-                params=match.group("params"),
-            )
-        return [line]
-
-    def process_macro(self, line: str, macro_name: str, params: str):
-        if macro_name == "IncludeUrlContentWiki":
-            return self.process_include_url_content_wiki(params=params)
-        else:
-            self.ctx.logger.warning(f"Unknown macro {macro_name}")
-            return [line]
-
-    def process_include_url_content_wiki(self, params: str):
-        url = params.strip().replace("%s", self.unescape(self.page_name))
-        return self.ctx.cache.fetch(url)
 
 
 @attr.s(kw_only=True, frozen=True, slots=True)

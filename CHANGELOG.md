@@ -15,3 +15,4 @@ Unreleased Changes
 - Added basic git fast-import data output - outputs moin markup
 - Added fetch cache and initial macro handling
 - Directly commit into a new git instance
+- Split the wiki translator out into a separate module
