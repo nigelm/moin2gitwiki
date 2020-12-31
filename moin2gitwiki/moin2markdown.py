@@ -27,6 +27,33 @@ class Moin2Markdown:
                 """,
         re.VERBOSE,
     )
+    ignored_moin_macros = (
+        "AttachInfo",
+        "AttachList",
+        "DateTime",
+        "FormCheckbox",
+        "FormFooter",
+        "FormHeader",
+        "FormRadio",
+        "FormSelect",
+        "FormSubmit",
+        "FormText",
+        "FormTextarea",
+        "FormUpload",
+        "FullSearch",
+        "GetText",
+        "GrabIt",
+        "Icon",
+        "IncVar",
+        "Include",
+        "MailTo",
+        "Navigation",
+        "PageList",
+        "RandomPage",
+        "RandomQuote",
+        "StatsChart",
+        "TableOfContents",
+    )
 
     @classmethod
     def create_translator(cls, ctx, cache_directory=Path):
@@ -54,7 +81,7 @@ class Moin2Markdown:
         new_lines = []
         for line in lines:
             # handle macro inserts
-            match = re.search(self.moin_macro_pattern, line)
+            match = self.moin_macro_pattern.search(line)
             if match is not None:
                 new_lines.extend(
                     self.process_macro(
@@ -77,9 +104,11 @@ class Moin2Markdown:
     ):
         if macro_name == "IncludeUrlContentWiki":
             return self.process_include_url_content_wiki(revision, params=params)
+        elif macro_name in self.ignored_moin_macros:
+            line = self.moin_macro_pattern.sub("", line)
         else:
-            self.ctx.logger.warning(f"Unknown macro {macro_name}")
-            return [line]
+            self.ctx.logger.warning(f"Unknown macro '{macro_name}'")
+        return [line]
 
     def process_include_url_content_wiki(self, revision: MoinEditEntry, params: str):
         url = params.strip().replace("%s", revision.unescape(revision.page_name))
