@@ -13,6 +13,7 @@ class Moin2Markdown:
     #
     # -- attributes
     fetch_cache: FetchCache = attr.ib()
+    link_table: dict = attr.ib()
     ctx = attr.ib(repr=False)
     #
     # -- regular expressions used
@@ -56,14 +57,14 @@ class Moin2Markdown:
     )
 
     @classmethod
-    def create_translator(cls, ctx, cache_directory=Path):
+    def create_translator(cls, ctx, cache_directory: Path, link_table: dict):
         #
         # Build a fetch cache
         fetch_cache = FetchCache.initialise_cache(
             cache_directory=cache_directory,
             ctx=ctx,
         )
-        return cls(fetch_cache=fetch_cache, ctx=ctx)
+        return cls(fetch_cache=fetch_cache, link_table=link_table, ctx=ctx)
 
     def retrieve_and_translate(self, revision: MoinEditEntry) -> Optional[bytes]:
         lines = revision.wiki_content()

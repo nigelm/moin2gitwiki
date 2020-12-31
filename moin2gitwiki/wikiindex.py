@@ -60,6 +60,9 @@ class MoinEditEntry:
     def unescape(self, thing):
         return thing.replace("(2f)", "/")
 
+    def page_name_unescaped(self):
+        return self.unescape(self.page_name)
+
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntries:
