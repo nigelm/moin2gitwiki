@@ -4,6 +4,7 @@ from typing import Optional
 import attr
 from bs4 import BeautifulSoup
 from furl import furl
+from sh import pandoc
 
 from .fetch_cache import FetchCache
 from .wikiindex import MoinEditEntry
@@ -17,6 +18,9 @@ class Moin2Markdown:
     url_prefix: furl = attr.ib()
     link_table: dict = attr.ib()
     ctx = attr.ib(repr=False)
+    #
+    # prebuilt sh setup
+    pandoc = pandoc.bake("-f", "html", "-t", "gfm")
 
     @classmethod
     def create_translator(
@@ -51,12 +55,21 @@ class Moin2Markdown:
             target.args["rev"] = revision.page_revision
             content = self.fetch_cache.fetch(target.url)
             main_content = self.extract_content_section(content)
-            return main_content
+            translated = self.translate(main_content)
+            return translated
 
     def extract_content_section(self, html: str) -> str:
         soup = BeautifulSoup(html, "html.parser")
-        content = soup.find(id="content").contents
-        return content
+        content = soup.find(id="content")
+        #
+        # now strip out excess rubbish - anchor spans
+        for tag in content.find_all(class_="anchor"):
+            tag.decompose()
+        return content.contents
+
+    def translate(self, input: str) -> str:
+        translated = self.pandoc(_in=input)
+        return translated
 
 
 # end
