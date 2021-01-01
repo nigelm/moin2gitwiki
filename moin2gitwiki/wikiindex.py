@@ -10,18 +10,6 @@ from .users import Moin2GitUser
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntry:
-    moin_macro_pattern = re.compile(
-        r"""
-                (?:\<\<|\[\[)                           # opening part
-                (?P<macroname>  [A-Za-z0-9]+        )   # macro name
-                \(                                      # opening parens
-                (?P<params>     [^\]]*              )   # parameters
-                \)                                      # closing parens
-                (?:\>\>|\]\])                           # closing part
-                """,
-        re.VERBOSE,
-    )
-
     edit_date: datetime = attr.ib()
     page_revision: str = attr.ib()
     edit_type: str = attr.ib()
@@ -33,8 +21,7 @@ class MoinEditEntry:
     ctx = attr.ib(repr=False)
 
     def wiki_content_path(self):
-        return os.path.join(
-            self.ctx.moin_data,
+        return self.ctx.moin_data.joinpath(
             "pages",
             self.page_path,
             "revisions",
@@ -46,13 +33,13 @@ class MoinEditEntry:
         if lines is None:
             return lines
         else:
-            return "".join(lines).encode("utf-8")
+            lines.append("")
+            return "\n".join(lines).encode("utf-8")
 
     def wiki_content(self):
         lines = []
         try:
-            with open(self.wiki_content_path()) as f:
-                lines = f.readlines()
+            lines = self.wiki_content_path().read_text().splitlines(keepends=False)
         except OSError:
             lines = None
         return lines

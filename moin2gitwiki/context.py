@@ -1,6 +1,6 @@
 import logging.handlers
-import os
 import sys
+from pathlib import Path
 
 import attr
 
@@ -20,7 +20,7 @@ SYSLOG_FORMATTER = logging.Formatter("%(name)s: [%(levelname)s] %(message)s")
 @attr.s(kw_only=True, slots=True)
 class Moin2GitContext:
     logger: logging.Logger = attr.ib()
-    moin_data: str = attr.ib()
+    moin_data: Path = attr.ib()
     users: Moin2GitUserSet = attr.ib(default=None)
     syslog: bool = attr.ib(default=False)
     debug: bool = attr.ib(default=False)
@@ -36,7 +36,7 @@ class Moin2GitContext:
             del kwargs["user_map"]
         #
         # make the paths absolute
-        kwargs["moin_data"] = os.path.abspath(kwargs["moin_data"])
+        kwargs["moin_data"] = Path(kwargs["moin_data"]).resolve(strict=True)
         #
         # build the context object
         context = cls(**kwargs)

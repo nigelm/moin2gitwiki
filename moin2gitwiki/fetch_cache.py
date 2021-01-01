@@ -51,7 +51,7 @@ class FetchCache:
             item_name = self.cache_map[url]
             item_path = self.cache_directory.joinpath(item_name)
             try:
-                lines = item_path.read_text().splitlines(keepends=True)
+                lines = item_path.read_text().splitlines(keepends=False)
                 self.ctx.logger.debug(f"Retrieved {url} from cache")
                 return lines
             except OSError:
@@ -78,7 +78,7 @@ class FetchCache:
         self.write_index(index_path=self.index_path, cache_map=self.cache_map)
         #
         # return response as a set of lines
-        return content.splitlines(keepends=True)
+        return content.splitlines(keepends=False)
 
 
 # end

@@ -72,10 +72,12 @@ class Moin2Markdown:
             return None
         else:
             lines = self.translate(revision, lines)
-            return "".join(lines).encode("utf-8")
+            lines.append("")  # additional line to give trailing \n
+            return "\n".join(lines).encode("utf-8")
 
     def translate(self, revision: MoinEditEntry, lines: list) -> list:
         lines = self.pre_process_lines(revision=revision, lines=lines)
+        lines = self.process_lines(revision=revision, lines=lines)
         return lines
 
     def pre_process_lines(self, revision: MoinEditEntry, lines: list) -> list:
@@ -93,6 +95,25 @@ class Moin2Markdown:
                     ),
                 )
             else:
+                new_lines.append(line)
+        return new_lines
+
+    def process_lines(self, revision: MoinEditEntry, lines: list) -> list:
+        new_lines = []
+        for line in lines:
+            if line.startswith("#"):
+                new_lines.append("")  # ignore it
+            elif line.startswith("="):
+                line = line.rstrip()
+                line = line.rstrip("=")
+                line = line.rstrip()
+                line = line.replace("=", "#")
+                new_lines.append(line)
+                new_lines.append("")
+            else:
+                line = line.replace("'''", "**")  # bold
+                line = line.replace("''", "*")  # italic
+                line = line.replace("[[BR]]", "<br/>")  # breaks
                 new_lines.append(line)
         return new_lines
 
