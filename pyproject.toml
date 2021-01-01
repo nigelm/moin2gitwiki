@@ -24,6 +24,7 @@ click = "^7.1.2"
 attrs = "^20.3.0"
 requests = {extras = ["socks"], version = "^2.25.1"}
 furl = "^2.1.0"
+beautifulsoup4 = "^4.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.0"
