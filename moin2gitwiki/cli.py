@@ -118,7 +118,7 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
     #
     # build a link_table
     link_table = {
-        revision.page_name_unescaped(): revision.page_name + ".md"
+        revision.page_name_unescaped(): revision.markdown_page_path()
         for revision in revisions.entries
     }
     #
@@ -172,7 +172,7 @@ def translate_page(ctx, cache_directory, url_prefix, page, version):
     #
     # build a link_table
     link_table = {
-        revision.page_name_unescaped(): revision.page_name + ".md"
+        revision.page_name_unescaped(): revision.markdown_page_path()
         for revision in revisions.entries
     }
     #

@@ -14,6 +14,7 @@ class MoinEditEntry:
     page_revision: str = attr.ib()
     edit_type: str = attr.ib()
     page_name: str = attr.ib()
+    previous_page_name: str = attr.ib(default=None)
     page_path: str = attr.ib()
     attachment: str = attr.ib(default="")
     comment: str = attr.ib(default="")
@@ -44,14 +45,20 @@ class MoinEditEntry:
             lines = None
         return lines
 
-    def unescape(self, thing):
+    def unescape(self, thing: str) -> str:
         return thing.replace("(2f)", "/")
 
-    def page_name_unescaped(self):
+    def page_name_unescaped(self) -> str:
         return self.unescape(self.page_name)
 
-    def page_path_unescaped(self):
+    def page_path_unescaped(self) -> str:
         return self.unescape(self.page_path)
+
+    def markdown_transform(self, thing: str) -> str:
+        return thing.replace("(2f)", "_") + ".md"
+
+    def markdown_page_path(self):
+        return self.markdown_transform(self.page_name)
 
 
 @attr.s(kw_only=True, frozen=True, slots=True)
@@ -76,6 +83,7 @@ class MoinEditEntries:
                 ctx.logger.warning(f"No edit-log for page {page}")
                 continue
             # read the lines in the edit-log file
+            previous_page_name = None
             for edit_line in edit_log_data:
                 if not re.match(r"\d{15}", edit_line):  # check its an edit entry
                     continue
@@ -89,6 +97,7 @@ class MoinEditEntries:
                         page_revision=edit_fields[1],
                         edit_type=edit_type,
                         page_name=edit_fields[3],
+                        previous_page_name=previous_page_name,
                         attachment=edit_fields[7],
                         comment=edit_fields[8],
                         page_path=page,
