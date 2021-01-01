@@ -16,3 +16,4 @@ Unreleased Changes
 - Added fetch cache and initial macro handling
 - Directly commit into a new git instance
 - Split the wiki translator out into a separate module
+- Rebuild the translator to use pandoc on a preprocessed html fragment
