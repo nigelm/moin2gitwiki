@@ -136,12 +136,13 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
     subprocess.run(["git", "init"])
     with subprocess.Popen(["git", "fast-import"], stdin=subprocess.PIPE) as gitstream:
         export = GitExportStream(output=gitstream.stdin, ctx=ctx)
-        for revision in revisions.entries:
-            content = translator.retrieve_and_translate(revision=revision)
-            export.add_wiki_revision(
-                revision=revision,
-                content=content,
-            )
+        with click.progressbar(revisions.entries) as entries:
+            for revision in entries:
+                content = translator.retrieve_and_translate(revision=revision)
+                export.add_wiki_revision(
+                    revision=revision,
+                    content=content,
+                )
         export.end_stream()
     subprocess.run(["git", "gc", "--aggressive"])  # pack it
     subprocess.run(["git", "checkout", "master"])  # check out the data

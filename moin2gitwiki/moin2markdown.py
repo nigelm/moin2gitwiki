@@ -138,7 +138,7 @@ class Moin2Markdown:
 
     def translate(self, input: str) -> str:
         translated = self.pandoc(_in=input)
-        return translated
+        return translated.stdout
 
 
 # end
