@@ -94,12 +94,18 @@ def list_revisions(ctx):
     default="_cache",
     envvar="MOIN2GIT_CACHE",
 )
+@click.option(
+    "--url-prefix",
+    "--prefix",
+    default="http://localhost/jrtwiki/",
+    envvar="MOIN2GIT_PREFIX",
+)
 @click.argument(
     "destination",
     type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
 @click.pass_obj
-def fast_export(ctx, cache_directory, destination):
+def fast_export(ctx, cache_directory, url_prefix, destination):
     """Git fast-export all the revisions in the wiki"""
     # cwd = Path.cwd()
     destination = Path(destination)
@@ -120,6 +126,7 @@ def fast_export(ctx, cache_directory, destination):
     translator = Moin2Markdown.create_translator(
         ctx=ctx,
         cache_directory=Path(cache_directory),
+        url_prefix=url_prefix,
         link_table=link_table,
     )
     #
@@ -130,16 +137,58 @@ def fast_export(ctx, cache_directory, destination):
     with subprocess.Popen(["git", "fast-import"], stdin=subprocess.PIPE) as gitstream:
         export = GitExportStream(output=gitstream.stdin, ctx=ctx)
         for revision in revisions.entries:
-            page_name = revision.page_name + ".md"  # Markdown extension for page names
             content = translator.retrieve_and_translate(revision=revision)
             export.add_wiki_revision(
                 revision=revision,
                 content=content,
-                name=page_name,
             )
         export.end_stream()
     subprocess.run(["git", "gc", "--aggressive"])  # pack it
     subprocess.run(["git", "checkout", "master"])  # check out the data
+
+
+# -----------------------------------------------------------------------
+@moin2gitwiki.command()
+@click.option(
+    "--cache-directory",
+    default="_cache",
+    envvar="MOIN2GIT_CACHE",
+)
+@click.option(
+    "--url-prefix",
+    "--prefix",
+    default="http://localhost/jrtwiki/",
+    envvar="MOIN2GIT_PREFIX",
+)
+@click.argument("page", required=True, type=str)
+@click.argument("version", required=True, type=int)
+@click.pass_obj
+def translate_page(ctx, cache_directory, url_prefix, page, version):
+    """Git fast-export all the revisions in the wiki"""
+    #
+    # build your initial revision set from the wiki data
+    revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
+    click.echo(click.style(f"Read {revisions.count()} wiki revisions", fg="green"))
+    #
+    # build a link_table
+    link_table = {
+        revision.page_name_unescaped(): revision.page_name + ".md"
+        for revision in revisions.entries
+    }
+    #
+    # build the translator
+    translator = Moin2Markdown.create_translator(
+        ctx=ctx,
+        cache_directory=Path(cache_directory),
+        url_prefix=url_prefix,
+        link_table=link_table,
+    )
+    #
+    # find the page and translate it
+    for revision in revisions.entries:
+        if revision.page_name == page and int(revision.page_revision) == version:
+            content = translator.retrieve_and_translate(revision=revision)
+            print(content)
 
 
 # -----------------------------------------------------------------------

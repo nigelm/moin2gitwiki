@@ -50,6 +50,9 @@ class MoinEditEntry:
     def page_name_unescaped(self):
         return self.unescape(self.page_name)
 
+    def page_path_unescaped(self):
+        return self.unescape(self.page_path)
+
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntries:

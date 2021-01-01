@@ -44,16 +44,16 @@ class FetchCache:
     def write_index(cls, index_path: Path, cache_map: dict):
         index_path.write_text(json.dumps(cache_map, indent=2))
 
-    def fetch(self, url: str):
+    def fetch(self, url: str) -> str:
         #
         # is this in the cache already
         if url in self.cache_map:
             item_name = self.cache_map[url]
             item_path = self.cache_directory.joinpath(item_name)
             try:
-                lines = item_path.read_text().splitlines(keepends=False)
+                content = item_path.read_text()
                 self.ctx.logger.debug(f"Retrieved {url} from cache")
-                return lines
+                return content
             except OSError:
                 pass  # just move on to refetch
         #
@@ -77,8 +77,8 @@ class FetchCache:
         self.cache_map[url] = item_name
         self.write_index(index_path=self.index_path, cache_map=self.cache_map)
         #
-        # return response as a set of lines
-        return content.splitlines(keepends=False)
+        # return response content
+        return content
 
 
 # end
