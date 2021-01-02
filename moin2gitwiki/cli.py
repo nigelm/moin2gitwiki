@@ -118,7 +118,7 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
     #
     # build a link_table
     link_table = {
-        revision.page_name_unescaped(): revision.markdown_page_path()
+        revision.page_name_unescaped(): revision.markdown_page_name()
         for revision in revisions.entries
     }
     #
@@ -143,6 +143,8 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
                     revision=revision,
                     content=content,
                 )
+            revision, content = revisions.create_home_page()
+            export.add_wiki_revision(revision=revision, content=content.encode("utf-8"))
         export.end_stream()
     subprocess.run(["git", "gc", "--aggressive"])  # pack it
     subprocess.run(["git", "checkout", "master"])  # check out the data
@@ -173,7 +175,7 @@ def translate_page(ctx, cache_directory, url_prefix, page, version):
     #
     # build a link_table
     link_table = {
-        revision.page_name_unescaped(): revision.markdown_page_path()
+        revision.page_name_unescaped(): revision.markdown_page_name()
         for revision in revisions.entries
     }
     #

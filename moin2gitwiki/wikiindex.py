@@ -2,6 +2,7 @@ import os
 import re
 from datetime import datetime
 from datetime import timedelta
+from typing import Tuple
 
 import attr
 
@@ -55,9 +56,12 @@ class MoinEditEntry:
         return self.unescape(self.page_path)
 
     def markdown_transform(self, thing: str) -> str:
-        return thing.replace("(2f)", "_") + ".md"
+        return thing.replace("(2f)", "_")
 
     def markdown_page_path(self):
+        return self.markdown_transform(self.page_name) + ".md"
+
+    def markdown_page_name(self):
         return self.markdown_transform(self.page_name)
 
 
@@ -115,6 +119,29 @@ class MoinEditEntries:
 
     def count(self) -> int:
         return len(self.entries)
+
+    def create_home_page(self) -> Tuple[MoinEditEntry, str]:
+        revision = MoinEditEntry(
+            edit_date=datetime.now(),
+            page_revision="1",
+            edit_type="SAVENEW",
+            page_name="Home",
+            attachment="",
+            comment="Synthetic Home Page",
+            page_path="Home",
+            user=self.ctx.users.get_user_by_id_or_anonymous("0"),
+            ctx=self.ctx,
+        )
+        pages = set()
+        for entry in self.entries:
+            if entry.page_name.find("(2f)") < 0:
+                pages.add(entry.markdown_page_name())
+        content = "# Home Page\n\n"
+        for item in sorted(pages):
+            content += f"- [{item}]({item})\n"
+        content += "\n----\n"
+
+        return (revision, content)
 
 
 # end
