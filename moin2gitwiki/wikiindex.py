@@ -2,6 +2,7 @@ import os
 import re
 from datetime import datetime
 from datetime import timedelta
+from typing import Tuple
 
 import attr
 
@@ -14,6 +15,7 @@ class MoinEditEntry:
     page_revision: str = attr.ib()
     edit_type: str = attr.ib()
     page_name: str = attr.ib()
+    previous_page_name: str = attr.ib(default=None)
     page_path: str = attr.ib()
     attachment: str = attr.ib(default="")
     comment: str = attr.ib(default="")
@@ -44,11 +46,23 @@ class MoinEditEntry:
             lines = None
         return lines
 
-    def unescape(self, thing):
+    def unescape(self, thing: str) -> str:
         return thing.replace("(2f)", "/")
 
-    def page_name_unescaped(self):
+    def page_name_unescaped(self) -> str:
         return self.unescape(self.page_name)
+
+    def page_path_unescaped(self) -> str:
+        return self.unescape(self.page_path)
+
+    def markdown_transform(self, thing: str) -> str:
+        return thing.replace("(2f)", "_")
+
+    def markdown_page_path(self):
+        return self.markdown_transform(self.page_name) + ".md"
+
+    def markdown_page_name(self):
+        return self.markdown_transform(self.page_name)
 
 
 @attr.s(kw_only=True, frozen=True, slots=True)
@@ -73,6 +87,7 @@ class MoinEditEntries:
                 ctx.logger.warning(f"No edit-log for page {page}")
                 continue
             # read the lines in the edit-log file
+            previous_page_name = None
             for edit_line in edit_log_data:
                 if not re.match(r"\d{15}", edit_line):  # check its an edit entry
                     continue
@@ -86,6 +101,7 @@ class MoinEditEntries:
                         page_revision=edit_fields[1],
                         edit_type=edit_type,
                         page_name=edit_fields[3],
+                        previous_page_name=previous_page_name,
                         attachment=edit_fields[7],
                         comment=edit_fields[8],
                         page_path=page,
@@ -103,6 +119,29 @@ class MoinEditEntries:
 
     def count(self) -> int:
         return len(self.entries)
+
+    def create_home_page(self) -> Tuple[MoinEditEntry, str]:
+        revision = MoinEditEntry(
+            edit_date=datetime.now(),
+            page_revision="1",
+            edit_type="SAVENEW",
+            page_name="Home",
+            attachment="",
+            comment="Synthetic Home Page",
+            page_path="Home",
+            user=self.ctx.users.get_user_by_id_or_anonymous("0"),
+            ctx=self.ctx,
+        )
+        pages = set()
+        for entry in self.entries:
+            if entry.page_name.find("(2f)") < 0:
+                pages.add(entry.markdown_page_name())
+        content = "# Home Page\n\n"
+        for item in sorted(pages):
+            content += f"- [{item}]({item})\n"
+        content += "\n----\n"
+
+        return (revision, content)
 
 
 # end

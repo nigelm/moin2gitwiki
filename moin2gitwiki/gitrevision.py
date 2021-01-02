@@ -17,10 +17,8 @@ class GitExportStream:
         self,
         revision: MoinEditEntry,
         content: bytes,
-        name: str = None,
     ):
-        if name is None:
-            name = revision.page_name
+        name = revision.markdown_page_path()
         if content is not None:
             blob_ref = self.output_blob(content)
         if self.last_commit_mark is None:
@@ -41,6 +39,13 @@ class GitExportStream:
         if content is None:
             self.write_string(f"D {name}\n\n")
         else:
+            if (
+                revision.previous_page_name is not None
+                and revision.previous_page_name != revision.page_name
+            ):
+                self.write_string(
+                    f"D {revision.markdown_transform(revision.previous_page_name)}\n",
+                )
             self.write_string(f"M 100644 :{blob_ref} {name}\n\n")
         self.last_commit_mark = commit_ref
         self.ctx.logger.debug(f"Written commit {commit_ref}")
