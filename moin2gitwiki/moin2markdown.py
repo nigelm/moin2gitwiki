@@ -123,6 +123,8 @@ class Moin2Markdown:
                     new_url = url.url[len(self.url_prefix.url) :]
                     if new_url in self.link_table:
                         tag["href"] = self.link_table[new_url]
+                    else:
+                        tag.unwrap()
             #
             # strip any class attributes on links - tend to upset the translator
             if tag.has_attr("class"):
