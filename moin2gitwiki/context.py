@@ -1,3 +1,9 @@
+"""
+moin2gitwiki context object - carries state between components
+
+This contains the basic context object, which has various global
+state information in it such as the logging objects.
+"""
 import logging.handlers
 import sys
 from pathlib import Path
@@ -19,6 +25,21 @@ SYSLOG_FORMATTER = logging.Formatter("%(name)s: [%(levelname)s] %(message)s")
 
 @attr.s(kw_only=True, slots=True)
 class Moin2GitContext:
+    """
+    Moin2GitContext Context Object - holds state, logging, etc
+
+    Called from the cli code.  Sets up all the common requirements.
+
+    Attributes:
+        debug:      if true we output more debugging chatter
+        verbose:    if true we output more progress information
+        syslog:     if true we additionally log to syslog at debug level
+        logger:     Logging object
+        moin_data:  Path of the MoinMoin data directory
+        users:      Moin user set object
+
+    """
+
     logger: logging.Logger = attr.ib()
     moin_data: Path = attr.ib()
     users: Moin2GitUserSet = attr.ib(default=None)
@@ -28,6 +49,11 @@ class Moin2GitContext:
 
     @classmethod
     def create_context(cls, **kwargs):
+        """
+        Create the context object
+
+        Builds the requirements for the context object and returns an object
+        """
         if "logger" not in kwargs:
             logger = logging.getLogger("moin2gitwiki")
             kwargs["logger"] = logger

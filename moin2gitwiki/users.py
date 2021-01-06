@@ -7,12 +7,25 @@ import attr
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class Moin2GitUser:
+    """
+    Represents a Moin user - for mapping to git user commits
+
+    Attributes:
+        moin_id: MoinMoin user id - multi-component numeric string
+        moin_name: The Moin username  - used as a git name
+        email: Email address of the user account
+
+    """
+
     moin_id: str = attr.ib()
     moin_name: str = attr.ib()
     email: str = attr.ib(default="user@example.org")
 
     @classmethod
     def load_user_from_file(cls, path, logger):
+        """
+        Reads the user data in from a moin user config file
+        """
         with open(path) as f:
             data = f.read()
         moin_id = os.path.basename(path)
@@ -27,11 +40,22 @@ class Moin2GitUser:
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class Moin2GitUserSet:
+    """
+    Represents a set of Moin users for mapping into git
+
+    Attributes:
+        id_map: maps moin user ids to Moin2GitUser objects
+        name_map: maps moin user names to Moin2GitUser objects
+    """
+
     id_map: dict = attr.ib(default={})
     name_map: dict = attr.ib(default={})
 
     @classmethod
     def create_from_users(cls, users, logger):
+        """
+        Builds a Moin2GitUserSet from a list of Moin2GitUser objects
+        """
         id_map = {}
         name_map = {}
         for user in users:
@@ -52,6 +76,9 @@ class Moin2GitUserSet:
 
     @classmethod
     def load_users_from_wiki_data(cls, wiki_data_path, logger):
+        """
+        Builds a Moin2GitUserSet from the wiki filesystem
+        """
         users_dir = os.path.join(wiki_data_path, "user")
         logger.debug(f"Loading wiki users from {users_dir}")
         users = []
@@ -71,6 +98,9 @@ class Moin2GitUserSet:
 
     @classmethod
     def load_users_from_file(cls, path, logger):
+        """
+        Builds a Moin2GitUserSet from a saved json file
+        """
         logger.debug(f"Loading wiki users from {path}")
         with open(path) as f:
             user_data_set = json.loads(f.read())
@@ -82,6 +112,9 @@ class Moin2GitUserSet:
         return cls.create_from_users(users=users, logger=logger)
 
     def save_users_to_file(self, path):
+        """
+        Writes a Moin2GitUserSet to a saved json file
+        """
         user_data = []
         for user in self.name_map.values():
             user_data.append(attr.asdict(user))
@@ -89,12 +122,21 @@ class Moin2GitUserSet:
             json.dump(user_data, f, indent=2, sort_keys=True)
 
     def get_user_by_name(self, name):
+        """
+        Gets a Moin2GitUser by matching moin name
+        """
         return self.name_map[name]
 
     def get_user_by_id(self, ident):
+        """
+        Gets a Moin2GitUser by matching a moin id
+        """
         return self.id_map[ident]
 
     def get_user_by_id_or_anonymous(self, ident):
+        """
+        Gets a Moin2GitUser by matching a moin id.  If non-existant returns the anonymous id
+        """
         if ident is None or ident not in self.id_map:
             return self.get_user_by_name("anonymous")
         else:

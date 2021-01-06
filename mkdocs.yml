@@ -1,13 +1,21 @@
-site_name: hutchlink
-site_description: "Link tweets to a page via RSS"
+site_name: moin2gitwiki
+site_description: "Convert MoinMoin filesystem into github/gitlab/gitea type git based wiki"
 site_url: ""
 repo_url: ""
-repo_name: "hutchlink"
+repo_name: "moin2gitwiki"
 
 nav:
   - Overview: index.md
   - Commands: commands.md
   - Changelog: changelog.md
+  - Internal:
+    - CLI:                internal/cli.md
+    - Context:            internal/context.md
+    - Fetch Cache:        internal/fetch_cache.md
+    - Git Revision:       internal/gitrevision.md
+    - Moin To Markdown:   internal/moin2markdown.md
+    - Users:              internal/users.md
+    - Wiki Index:         internal/wikiindex.md
 
 theme:
   name: material
@@ -36,6 +44,8 @@ plugins:
             show_source: true
           selection:
             new_path_syntax: yes
+            filters:
+              - "!^_"  # exlude all members starting with _
       watch:
-        - hutchlink
+        - moin2gitwiki
 # end

@@ -11,6 +11,25 @@ from .users import Moin2GitUser
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntry:
+    """
+    Represents a Moin page revision
+
+    There are multiple revisions per page.
+
+    Attributes:
+        edit_date: The date of the edit
+        page_revision: The revision id of this revision - a string of a zero padded number
+        edit_type: Moin edit type
+        page_name: The name of the page from the index file
+        previous_page_name: The name the page previously had if renamed
+        page_path: The name on the filesystem of the page
+        attachment: attachment field - not used
+        comment: comment filed - only used for git comments
+        user: the mapped moin user
+        ctx: Context - there for moin_path and logging
+
+    """
+
     edit_date: datetime = attr.ib()
     page_revision: str = attr.ib()
     edit_type: str = attr.ib()
@@ -23,6 +42,7 @@ class MoinEditEntry:
     ctx = attr.ib(repr=False)
 
     def wiki_content_path(self):
+        """The file pathname of the revision file"""
         return self.ctx.moin_data.joinpath(
             "pages",
             self.page_path,
@@ -31,6 +51,7 @@ class MoinEditEntry:
         )
 
     def wiki_content_bytes(self):
+        """The content of the wiki revision retrieved as a byte string"""
         lines = self.wiki_content()
         if lines is None:
             return lines
@@ -39,6 +60,7 @@ class MoinEditEntry:
             return "\n".join(lines).encode("utf-8")
 
     def wiki_content(self):
+        """The content of the wiki revision as an array of strings"""
         lines = []
         try:
             lines = self.wiki_content_path().read_text().splitlines(keepends=False)
@@ -47,26 +69,36 @@ class MoinEditEntry:
         return lines
 
     def unescape(self, thing: str) -> str:
+        """Uescape a wiki name - translate (2f) to /"""
         return thing.replace("(2f)", "/")
 
     def page_name_unescaped(self) -> str:
+        """Unescape the page name"""
         return self.unescape(self.page_name)
 
     def page_path_unescaped(self) -> str:
+        """Unescape the page path"""
         return self.unescape(self.page_path)
 
     def markdown_transform(self, thing: str) -> str:
+        """Translates the (2f) to _ for use in Markdown page names"""
         return thing.replace("(2f)", "_")
 
     def markdown_page_path(self):
+        """Page path translated"""
         return self.markdown_transform(self.page_name) + ".md"
 
     def markdown_page_name(self):
+        """Page name translated"""
         return self.markdown_transform(self.page_name)
 
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class MoinEditEntries:
+    """
+    A sorted collection of Moin revision entry objects
+    """
+
     entries: list = attr.ib()
     ctx = attr.ib(repr=False)
 
@@ -121,6 +153,7 @@ class MoinEditEntries:
         return len(self.entries)
 
     def create_home_page(self) -> Tuple[MoinEditEntry, str]:
+        """Builds a synthetic home page to link all the wiki entries together"""
         revision = MoinEditEntry(
             edit_date=datetime.now(),
             page_revision="1",

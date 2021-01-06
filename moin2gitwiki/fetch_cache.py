@@ -8,6 +8,22 @@ import requests
 
 @attr.s(kw_only=True, slots=True)
 class FetchCache:
+    """
+    Implements a local cache for URLs which can be persistant between runs
+
+    Basic cache directory which contains an `index.json` file with a table of
+    URLs and the cache file they map to.  Has zero intelligence - assumes
+    everything can be cached for ever - which is reasonable considering the
+    things we request via the cache.
+
+    Attributes:
+        cache_directory:    Path of the cache directory
+        index_path:         Path of the cache index file - normally `index.json` within `cache_directory`
+        cache_map:          The dict mapping URLs to filenames within the cache
+        ctx:                Context object (used for logging etc)
+
+    """
+
     cache_directory: Path = attr.ib()
     index_path: Path = attr.ib()
     cache_map: dict = attr.ib(default={})
@@ -15,6 +31,12 @@ class FetchCache:
 
     @classmethod
     def initialise_cache(cls, cache_directory: Path, ctx):
+        """
+        Build and preload the cache object
+
+        Creates if needed the passed `cache_directory`, and either loads the
+        existing `index.json` or writes an empty one.
+        """
         # ensure directory exists
         cache_directory.mkdir(mode=0o777, parents=True, exist_ok=True)
         # ensure we have it as an absolute path
@@ -42,9 +64,11 @@ class FetchCache:
 
     @classmethod
     def write_index(cls, index_path: Path, cache_map: dict):
+        """Write the cache index out to disk"""
         index_path.write_text(json.dumps(cache_map, indent=2))
 
     def fetch(self, url: str) -> str:
+        """Fetch a URL, from the cache if there, otherwise put a copy into cache"""
         #
         # is this in the cache already
         if url in self.cache_map:

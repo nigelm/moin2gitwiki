@@ -18,3 +18,4 @@ Unreleased Changes
 - Split the wiki translator out into a separate module
 - Rebuild the translator to use pandoc on a preprocessed html fragment
 - Add a synthetic home page to generated wiki
+- Add some docs

@@ -1,3 +1,10 @@
+"""
+moin2gitwiki Command Line Handling
+
+Documentation is in the commands part of the documentation - the general
+internals handling does not parse click decorators very well :-(
+
+"""
 import os
 import subprocess
 from pathlib import Path
@@ -29,20 +36,36 @@ from .wikiindex import MoinEditEntries
 @click.version_option(__version__)
 @click.pass_context
 def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
-    """MoinMoin To Git Wiki Tools Command Line Utility
+    """
+    MoinMoin To Git Wiki Tools Command Line Utility
 
-    The other global options are related to the logging setup.
+    Converts a MoinMoin wiki into a git repository populated with Markdown
+    formatted pages, set up for use on a git based wiki such as the built in
+    wiki for `gitea`, `github` or `gitlab`
+
+    This parses the users and the revision structure from the MoinMoin data
+    filesystem.  However converting the wiki markup was found to be best done
+    by converting the output HTML using `pandoc`.
+
+    The utility requires `git` and `pandoc` commands to be available in the
+    path.
 
     #### Environment Variables
 
     The common options can also be set by use of environment variables:
 
     - `--debug` - `MOIN2GIT_DEBUG` - Output debugging logging
+
     - `--verbose` - `MOIN2GIT_VERBOSE` - Output verbose logging
+
     - `--syslog` - `MOIN2GIT_SYSLOG` - Send logging to syslog
+
     - `--moin-data` - `MOIN2GIT_DATA` - Data directory for moin
-    - `--user-map` - `MOIN2GIT_USERS` - User map for moin
-    - `--cache` - `MOIN2GIT_CACHE` - Directory for moin component fetches
+
+    - `--user-map` - `MOIN2GIT_USERS` - User map for moin - see the `save-users` command for info
+
+    - `cache-directory` - `MOIN2GIT_CACHE` - Directory for moin component fetches.
+      This defaults to `_cache` in the current directory.
 
     #### Help
 
@@ -74,17 +97,27 @@ def check(ctx):
 @click.argument("filename", type=click.Path(file_okay=True, dir_okay=False))
 @click.pass_obj
 def save_users(ctx, filename):
-    """Write the user map out to a file"""
+    """
+    Write the user map out to a file
+
+    This writes all the users found in the wiki out to a JSON file. This can
+    then be modified, if required, and used as the input to the `--user-map`
+    option - typically this would be to fix any email address or name issues.
+
+    These user entries are used to set the author of git commits within the
+    output repository.
+
+    The file format is an JSON file consisting of an array of user records,
+    which each look like:-
+
+        {
+            "email": "user@example.com",
+            "moin_id": "1358271613.26.36417",
+            "moin_name": "SomeUser"
+        },
+
+    """
     ctx.users.save_users_to_file(filename)
-
-
-# -----------------------------------------------------------------------
-@moin2gitwiki.command()
-@click.pass_obj
-def list_revisions(ctx):
-    """List all the revisions in the wiki"""
-    revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
-    print(revisions)
 
 
 # -----------------------------------------------------------------------
@@ -106,7 +139,32 @@ def list_revisions(ctx):
 )
 @click.pass_obj
 def fast_export(ctx, cache_directory, url_prefix, destination):
-    """Git fast-export all the revisions in the wiki"""
+    """
+    Git fast-export all the revisions in the wiki into markdown git wiki form
+
+    Named for the `git fast-export` command, although it actually builds a new
+    git repository and then translates each revision at a time into a command
+    stream for `git-fast-import` on that new repository.  After all pages and
+    revisions have been processed the new git wiki repo instance is garbage
+    collected  (to compress all the revisions into a more compact set of git
+    packs) and finally checked out.
+
+    Page names are slightly modified - the "(2f)" seen in wiki file names
+    (which is normally displayed as a `/` character) are changed to
+    underscores.  Internal links are remapped - however if a link goes within
+    the wiki namespace to something that was not found in the wiki (this may
+    include attachments which are not currently bought across), then the link
+    is deleted (although the link text is left).
+
+    Although the filesystem data is read to derive the revision and history
+    information, the actual page transformation is done by retrieving the
+    page html from its webserver, cutting the content div out of that html,
+    doing a few simplifications and translations (specifcially images
+    corresponding to emojis are converted to emoji forms).  This HTML is then
+    pass through pandoc to get a markdown (specifically github flavoured
+    markdown).
+
+    """
     # cwd = Path.cwd()
     destination = Path(destination)
     if destination.exists():
@@ -167,7 +225,13 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
 @click.argument("version", required=True, type=int)
 @click.pass_obj
 def translate_page(ctx, cache_directory, url_prefix, page, version):
-    """Git fast-export all the revisions in the wiki"""
+    """
+    Fetch a single page revision and translate to Markdown
+
+    The first argument is a page name, the second an integer revision.
+
+    The translation process is as described for the `fast-expor`a command.
+    """
     #
     # build your initial revision set from the wiki data
     revisions = MoinEditEntries.create_edit_entries(ctx=ctx)

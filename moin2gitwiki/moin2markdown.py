@@ -21,6 +21,16 @@ def is_a_linemark_para(tag):
 
 @attr.s(kw_only=True, frozen=True, slots=True)
 class Moin2Markdown:
+    """
+    Conversion object to convert MoinMoin wiki markup to Markdown
+
+    Attributes:
+        fetch_cache:    A FetchCache object used to retrieve URLs
+        url_prefix:     The URL prefix of the Moin wiki web presence
+        link_table:     A mapping of Moin unescaped names to page names
+        ctx:            Context object - logger and user mapping etc
+    """
+
     #
     # -- attributes
     fetch_cache: FetchCache = attr.ib()
@@ -74,6 +84,16 @@ class Moin2Markdown:
         url_prefix: str,
         link_table: dict,
     ):
+        """
+        Build a translator object
+
+        Parameters:
+            ctx:            Context object (logger etc)
+            cache_directory:    Path object for the cache directory
+            url_prefix:     The base URL for the MoinMoin wiki
+            link_table:     A translation table for wiki links
+
+        """
         #
         # Build a fetch cache
         fetch_cache = FetchCache.initialise_cache(
@@ -88,6 +108,16 @@ class Moin2Markdown:
         )
 
     def retrieve_and_translate(self, revision: MoinEditEntry) -> Optional[str]:
+        """
+        Retrieve a wiki revision, and translate it to markdown
+
+        Parameters:
+            revision:    The wiki revision object for the revision we want
+
+        If the revision maps to an empty object - ie it deleted the page, or
+        similar, then a None object is returned.
+
+        """
         # check if this revision has any content...
         lines = revision.wiki_content()
         if lines is None:
@@ -103,6 +133,23 @@ class Moin2Markdown:
             return translated
 
     def extract_content_section(self, html: str) -> str:
+        """
+        Extract the content part of the HTML, and simplify
+
+        Parameters:
+            html:    The html data
+
+        Pulls out the content div and simplifies the  HTML.
+        Simplification consists of:-
+
+        - stripping out redundant anchor spans
+        - remove the additional line marking paragraphs
+        - rewrite a/hrefs
+        - strip internal a/hrefs that have no existng target
+        - strip class attributes from links
+        - remap any emoji img to the emoji sequence
+
+        """
         soup = BeautifulSoup(html, "html.parser")
         content = soup.find(id="content")
         #
@@ -139,6 +186,7 @@ class Moin2Markdown:
         return content.contents
 
     def translate(self, input: str) -> str:
+        """Translate HTML to Github Flavoured Markdown using pandoc"""
         translated = self.pandoc(_in=input)
         return translated.stdout
 
