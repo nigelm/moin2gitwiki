@@ -28,7 +28,7 @@ jobs:
 before_deploy:
   - pip install --upgrade pip
   - pip install poetry
-  - poetry config pypi-token.pypi $PYPI_PASSWORD
+  #- poetry config pypi-token.pypi $PYPI_PASSWORD
 
 #deploy:
 #- provider: script
@@ -43,7 +43,7 @@ before_deploy:
 deploy:
   - git config user.name "Travis Docs Builder"
   - git config user.email "travis@example.org"
-  - git remote add gh-token "https://${GH_TOKEN}@github.com/nigelm/broadworks_ocip.git";
+  - git remote add gh-token "https://${GH_TOKEN}@github.com/nigelm/moin2gitwiki.git";
   - git fetch gh-token && git fetch gh-token gh-pages:gh-pages;
   - poetry run mkdocs gh-deploy -v --clean --remote-name gh-token;
 

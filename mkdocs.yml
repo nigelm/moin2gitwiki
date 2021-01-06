@@ -1,7 +1,7 @@
 site_name: moin2gitwiki
 site_description: "Convert MoinMoin filesystem into github/gitlab/gitea type git based wiki"
-site_url: ""
-repo_url: ""
+site_url: "https://nigelm.github.io/moin2gitwiki/"
+repo_url: "https://github.com/nigelm/moin2gitwiki"
 repo_name: "moin2gitwiki"
 
 nav:
