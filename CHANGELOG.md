@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+[0.2.0] - 2021-01-06
+--------------------
 - Initial structure
 - Initial CLI structure in place
 - Added moin wiki user parser

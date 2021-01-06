@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "moin2gitwiki"
-version = "0.1.0"
+version = "0.2.0"
 description = "MoinMoin To Git (Markdown) Wiki Converter"
 authors = ["Nigel Metheringham <nigelm@cpan.org>"]
 readme = "README.md"
