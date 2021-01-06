@@ -1,0 +1,49 @@
+# Config file for automatic testing at travis-ci.com
+##
+## NB This requires the following variables to be defined against
+## The project in travis-ci:-
+##  GH_TOKEN        - Github PAT allowing documentation push to github pages
+##  PYPI_PASSWORD   - PYPI Token (not password) allowing push to pypi
+
+language: python
+python:
+  - "3.8"
+install:
+  - pip install poetry
+  - poetry install
+script:
+  - poetry run pytest
+  - poetry run mkdocs build
+
+stages:
+  - test
+  - lint
+  - name: deploy
+    if: tag IS present
+
+jobs:
+  fast_finish: true
+
+before_deploy:
+  - pip install --upgrade pip
+  - pip install poetry
+  - poetry config pypi-token.pypi $PYPI_PASSWORD
+
+#deploy:
+#- provider: script
+#  script: poetry publish --build
+#  on:
+#    python: 3.8
+#    branch: master
+#    tags: true
+
+# push the documentation out
+##after_deploy:
+deploy:
+  - git config user.name "Travis Docs Builder"
+  - git config user.email "travis@example.org"
+  - git remote add gh-token "https://${GH_TOKEN}@github.com/nigelm/broadworks_ocip.git";
+  - git fetch gh-token && git fetch gh-token gh-pages:gh-pages;
+  - poetry run mkdocs gh-deploy -v --clean --remote-name gh-token;
+
+# end
