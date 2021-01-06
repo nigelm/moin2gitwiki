@@ -1,0 +1,730 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Convert MoinMoin filesystem into github/gitlab/gitea type git based wiki">
+      
+      
+      
+      
+        <link rel="canonical" href="https://nigelm.github.io/moin2gitwiki/commands/">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
+    
+    
+      
+        <title>Commands - moin2gitwiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.3b61ea93.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.39b8e14a.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/mkdocstrings.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#moinmoin-to-git-wiki-conversion-tools" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://nigelm.github.io/moin2gitwiki/" title="moin2gitwiki" class="md-header-nav__button md-logo" aria-label="moin2gitwiki">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            moin2gitwiki
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Commands
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/nigelm/moin2gitwiki/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    moin2gitwiki
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://nigelm.github.io/moin2gitwiki/" title="moin2gitwiki" class="md-nav__button md-logo" aria-label="moin2gitwiki">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    moin2gitwiki
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/nigelm/moin2gitwiki/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    moin2gitwiki
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href=".." class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Commands
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Commands
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki" class="md-nav__link">
+    moin2gitwiki
+  </a>
+  
+    <nav class="md-nav" aria-label="moin2gitwiki">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    Environment Variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    Help
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check" class="md-nav__link">
+    check
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast-export" class="md-nav__link">
+    fast-export
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-users" class="md-nav__link">
+    save-users
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translate-page" class="md-nav__link">
+    translate-page
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../changelog/" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  
+  <li class="md-nav__item md-nav__item--nested">
+    
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" data-md-state="indeterminate" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      Internal
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Internal" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        Internal
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/context/" class="md-nav__link">
+      Context
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/fetch_cache/" class="md-nav__link">
+      Fetch Cache
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/gitrevision/" class="md-nav__link">
+      Git Revision
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/moin2markdown/" class="md-nav__link">
+      Moin To Markdown
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/users/" class="md-nav__link">
+      Users
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../internal/wikiindex/" class="md-nav__link">
+      Wiki Index
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki" class="md-nav__link">
+    moin2gitwiki
+  </a>
+  
+    <nav class="md-nav" aria-label="moin2gitwiki">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    Environment Variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    Help
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check" class="md-nav__link">
+    check
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast-export" class="md-nav__link">
+    fast-export
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-users" class="md-nav__link">
+    save-users
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translate-page" class="md-nav__link">
+    translate-page
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/nigelm/moin2gitwiki/edit/master/docs/commands.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="moinmoin-to-git-wiki-conversion-tools">MoinMoin To Git Wiki Conversion Tools</h1>
+<p>The tools are a set of command line tools under the name <code>moin2gitwiki</code>.</p>
+<h2 id="moin2gitwiki">moin2gitwiki</h2>
+<p>MoinMoin To Git Wiki Tools Command Line Utility</p>
+<p>Converts a MoinMoin wiki into a git repository populated with Markdown
+formatted pages, set up for use on a git based wiki such as the built in
+wiki for <code>gitea</code>, <code>github</code> or <code>gitlab</code></p>
+<p>This parses the users and the revision structure from the MoinMoin data
+filesystem.  However converting the wiki markup was found to be best done
+by converting the output HTML using <code>pandoc</code>.</p>
+<p>The utility requires <code>git</code> and <code>pandoc</code> commands to be available in the
+path.</p>
+<h4 id="environment-variables">Environment Variables</h4>
+<p>The common options can also be set by use of environment variables:</p>
+<ul>
+<li>
+<p><code>--debug</code> - <code>MOIN2GIT_DEBUG</code> - Output debugging logging</p>
+</li>
+<li>
+<p><code>--verbose</code> - <code>MOIN2GIT_VERBOSE</code> - Output verbose logging</p>
+</li>
+<li>
+<p><code>--syslog</code> - <code>MOIN2GIT_SYSLOG</code> - Send logging to syslog</p>
+</li>
+<li>
+<p><code>--moin-data</code> - <code>MOIN2GIT_DATA</code> - Data directory for moin</p>
+</li>
+<li>
+<p><code>--user-map</code> - <code>MOIN2GIT_USERS</code> - User map for moin - see the <code>save-users</code> command for info</p>
+</li>
+<li>
+<p><code>cache-directory</code> - <code>MOIN2GIT_CACHE</code> - Directory for moin component fetches.
+  This defaults to <code>_cache</code> in the current directory.</p>
+</li>
+</ul>
+<h4 id="help">Help</h4>
+<p>Running the <code>moin2gitwiki</code> command on its own will show some help
+information.</p>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code>moin2gitwiki [OPTIONS] COMMAND [ARGS]...
+</code></pre></div>
+<p>Options:</p>
+<div class="highlight"><pre><span></span><code>  --debug / --no-debug
+  --verbose / --no-verbose
+  --syslog / --no-syslog
+  --moin-data DIRECTORY
+  --user-map FILE
+  --version                 Show the version and exit.
+</code></pre></div>
+<h3 id="check">check</h3>
+<p>A minimal check to see if we run in this environment</p>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code>moin2gitwiki check [OPTIONS]
+</code></pre></div>
+<h3 id="fast-export">fast-export</h3>
+<p>Git fast-export all the revisions in the wiki into markdown git wiki form</p>
+<p>Named for the <code>git fast-export</code> command, although it actually builds a new
+git repository and then translates each revision at a time into a command
+stream for <code>git-fast-import</code> on that new repository.  After all pages and
+revisions have been processed the new git wiki repo instance is garbage
+collected  (to compress all the revisions into a more compact set of git
+packs) and finally checked out.</p>
+<p>Page names are slightly modified - the "(2f)" seen in wiki file names
+(which is normally displayed as a <code>/</code> character) are changed to
+underscores.  Internal links are remapped - however if a link goes within
+the wiki namespace to something that was not found in the wiki (this may
+include attachments which are not currently bought across), then the link
+is deleted (although the link text is left).</p>
+<p>Although the filesystem data is read to derive the revision and history
+information, the actual page transformation is done by retrieving the
+page html from its webserver, cutting the content div out of that html,
+doing a few simplifications and translations (specifcially images
+corresponding to emojis are converted to emoji forms).  This HTML is then
+pass through pandoc to get a markdown (specifically github flavoured
+markdown).</p>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code>moin2gitwiki fast-export [OPTIONS] DESTINATION
+</code></pre></div>
+<p>Options:</p>
+<div class="highlight"><pre><span></span><code>  --cache-directory TEXT
+  --url-prefix, --prefix TEXT
+</code></pre></div>
+<h3 id="save-users">save-users</h3>
+<p>Write the user map out to a file</p>
+<p>This writes all the users found in the wiki out to a JSON file. This can
+then be modified, if required, and used as the input to the <code>--user-map</code>
+option - typically this would be to fix any email address or name issues.</p>
+<p>These user entries are used to set the author of git commits within the
+output repository.</p>
+<p>The file format is an JSON file consisting of an array of user records,
+which each look like:-</p>
+<div class="highlight"><pre><span></span><code>{
+    &quot;email&quot;: &quot;user@example.com&quot;,
+    &quot;moin_id&quot;: &quot;1358271613.26.36417&quot;,
+    &quot;moin_name&quot;: &quot;SomeUser&quot;
+},
+</code></pre></div>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code>moin2gitwiki save-users [OPTIONS] FILENAME
+</code></pre></div>
+<h3 id="translate-page">translate-page</h3>
+<p>Fetch a single page revision and translate to Markdown</p>
+<p>The first argument is a page name, the second an integer revision.</p>
+<p>The translation process is as described for the <code>fast-expor</code>a command.</p>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code>moin2gitwiki translate-page [OPTIONS] PAGE VERSION
+</code></pre></div>
+<p>Options:</p>
+<div class="highlight"><pre><span></span><code>  --cache-directory TEXT
+  --url-prefix, --prefix TEXT
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../changelog/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Changelog
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ['navigation.instant', 'navigation.expand'],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.8c7e0a7e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

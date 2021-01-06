@@ -1,0 +1,948 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Convert MoinMoin filesystem into github/gitlab/gitea type git based wiki">
+      
+      
+      
+      
+        <link rel="canonical" href="https://nigelm.github.io/moin2gitwiki/internal/moin2markdown/">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
+    
+    
+      
+        <title>Moin To Markdown - moin2gitwiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3b61ea93.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.39b8e14a.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../css/mkdocstrings.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#moin2gitwiki.moin2markdown" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://nigelm.github.io/moin2gitwiki/" title="moin2gitwiki" class="md-header-nav__button md-logo" aria-label="moin2gitwiki">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            moin2gitwiki
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Moin To Markdown
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/nigelm/moin2gitwiki/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    moin2gitwiki
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://nigelm.github.io/moin2gitwiki/" title="moin2gitwiki" class="md-nav__button md-logo" aria-label="moin2gitwiki">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    moin2gitwiki
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/nigelm/moin2gitwiki/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    moin2gitwiki
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../../commands/" class="md-nav__link">
+      Commands
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../../changelog/" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  
+
+
+  
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      Internal
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Internal" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        Internal
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../context/" class="md-nav__link">
+      Context
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../fetch_cache/" class="md-nav__link">
+      Fetch Cache
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../gitrevision/" class="md-nav__link">
+      Git Revision
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Moin To Markdown
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Moin To Markdown
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown" class="md-nav__link">
+    moin2gitwiki.moin2markdown
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown" class="md-nav__link">
+    Moin2Markdown
+  </a>
+  
+    <nav class="md-nav" aria-label="Moin2Markdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.create_translator" class="md-nav__link">
+    create_translator()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.extract_content_section" class="md-nav__link">
+    extract_content_section()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.retrieve_and_translate" class="md-nav__link">
+    retrieve_and_translate()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.translate" class="md-nav__link">
+    translate()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../users/" class="md-nav__link">
+      Users
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../wikiindex/" class="md-nav__link">
+      Wiki Index
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown" class="md-nav__link">
+    moin2gitwiki.moin2markdown
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown" class="md-nav__link">
+    Moin2Markdown
+  </a>
+  
+    <nav class="md-nav" aria-label="Moin2Markdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.create_translator" class="md-nav__link">
+    create_translator()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.extract_content_section" class="md-nav__link">
+    extract_content_section()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.retrieve_and_translate" class="md-nav__link">
+    retrieve_and_translate()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.moin2markdown.Moin2Markdown.translate" class="md-nav__link">
+    translate()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/nigelm/moin2gitwiki/edit/master/docs/internal/moin2markdown.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Moin To Markdown</h1>
+                
+                <div class="doc doc-object doc-module">
+<h2 class="hidden-toc" href="#moin2gitwiki.moin2markdown" id="moin2gitwiki.moin2markdown" style="visibility: hidden; position: absolute;">
+        </h2>
+<div class="doc doc-contents first">
+<div class="doc doc-children">
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="moin2gitwiki.moin2markdown.Moin2Markdown">
+
+        <code>Moin2Markdown</code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Conversion object to convert MoinMoin wiki markup to Markdown</p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fetch_cache</code></td>
+<td><code>FetchCache</code></td>
+<td>
+<p>A FetchCache object used to retrieve URLs</p>
+</td>
+</tr>
+<tr>
+<td><code>url_prefix</code></td>
+<td><code>furl</code></td>
+<td>
+<p>The URL prefix of the Moin wiki web presence</p>
+</td>
+</tr>
+<tr>
+<td><code>link_table</code></td>
+<td><code>dict</code></td>
+<td>
+<p>A mapping of Moin unescaped names to page names</p>
+</td>
+</tr>
+<tr>
+<td><code>ctx</code></td>
+<td><code></code></td>
+<td>
+<p>Context object - logger and user mapping etc</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.moin2markdown.Moin2Markdown.create_translator">
+
+        <code class="highlight language-python">
+create_translator<span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">cache_directory</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">,</span> <span class="n">link_table</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Build a translator object</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ctx</code></td>
+<td><code></code></td>
+<td>
+<p>Context object (logger etc)</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>cache_directory</code></td>
+<td><code>Path</code></td>
+<td>
+<p>Path object for the cache directory</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>url_prefix</code></td>
+<td><code>str</code></td>
+<td>
+<p>The base URL for the MoinMoin wiki</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>link_table</code></td>
+<td><code>dict</code></td>
+<td>
+<p>A translation table for wiki links</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/moin2markdown.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">create_translator</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">cache_directory</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">url_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">link_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Build a translator object</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        ctx:            Context object (logger etc)</span>
+<span class="sd">        cache_directory:    Path object for the cache directory</span>
+<span class="sd">        url_prefix:     The base URL for the MoinMoin wiki</span>
+<span class="sd">        link_table:     A translation table for wiki links</span>
+
+<span class="sd">    """</span>
+    <span class="c1">#</span>
+    <span class="c1"># Build a fetch cache</span>
+    <span class="n">fetch_cache</span> <span class="o">=</span> <span class="n">FetchCache</span><span class="o">.</span><span class="n">initialise_cache</span><span class="p">(</span>
+        <span class="n">cache_directory</span><span class="o">=</span><span class="n">cache_directory</span><span class="p">,</span>
+        <span class="n">ctx</span><span class="o">=</span><span class="n">ctx</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">fetch_cache</span><span class="o">=</span><span class="n">fetch_cache</span><span class="p">,</span>
+        <span class="n">link_table</span><span class="o">=</span><span class="n">link_table</span><span class="p">,</span>
+        <span class="n">url_prefix</span><span class="o">=</span><span class="n">furl</span><span class="p">(</span><span class="n">url_prefix</span><span class="p">),</span>
+        <span class="n">ctx</span><span class="o">=</span><span class="n">ctx</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.moin2markdown.Moin2Markdown.extract_content_section">
+
+        <code class="highlight language-python">
+extract_content_section<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Extract the content part of the HTML, and simplify</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>html</code></td>
+<td><code>str</code></td>
+<td>
+<p>The html data</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<p>Pulls out the content div and simplifies the  HTML.
+Simplification consists of:-</p>
+<ul>
+<li>stripping out redundant anchor spans</li>
+<li>remove the additional line marking paragraphs</li>
+<li>rewrite a/hrefs</li>
+<li>strip internal a/hrefs that have no existng target</li>
+<li>strip class attributes from links</li>
+<li>remap any emoji img to the emoji sequence</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/moin2markdown.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">extract_content_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Extract the content part of the HTML, and simplify</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        html:    The html data</span>
+
+<span class="sd">    Pulls out the content div and simplifies the  HTML.</span>
+<span class="sd">    Simplification consists of:-</span>
+
+<span class="sd">    - stripping out redundant anchor spans</span>
+<span class="sd">    - remove the additional line marking paragraphs</span>
+<span class="sd">    - rewrite a/hrefs</span>
+<span class="sd">    - strip internal a/hrefs that have no existng target</span>
+<span class="sd">    - strip class attributes from links</span>
+<span class="sd">    - remap any emoji img to the emoji sequence</span>
+
+<span class="sd">    """</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s2">"html.parser"</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">"content"</span><span class="p">)</span>
+    <span class="c1">#</span>
+    <span class="c1"># now strip out excess rubbish - anchor spans</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s2">"anchor"</span><span class="p">):</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">decompose</span><span class="p">()</span>
+    <span class="c1">#</span>
+    <span class="c1"># Remove dead &lt;p class="line???"&gt; with no closer</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">is_a_linemark_para</span><span class="p">):</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
+    <span class="c1">#</span>
+    <span class="c1"># now find all the links, and if within the wiki, rewrite</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"a"</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
+                <span class="n">new_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="p">:]</span>
+                <span class="k">if</span> <span class="n">new_url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">link_table</span><span class="p">:</span>
+                    <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">link_table</span><span class="p">[</span><span class="n">new_url</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tag</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
+        <span class="c1">#</span>
+        <span class="c1"># strip any class attributes on links - tend to upset the translator</span>
+        <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">):</span>
+            <span class="k">del</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"class"</span><span class="p">]</span>
+    <span class="c1">#</span>
+    <span class="c1"># now find all the images and see if they map to emojis</span>
+    <span class="c1"># MoinMoin puts the emoji code in the title, so will purely match on that</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"img"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">smiley_map</span><span class="p">:</span>
+            <span class="n">tag</span><span class="o">.</span><span class="n">replace_with</span><span class="p">(</span><span class="s2">" "</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">smiley_map</span><span class="p">[</span><span class="n">tag</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]]</span> <span class="o">+</span> <span class="s2">" "</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">content</span><span class="o">.</span><span class="n">contents</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.moin2markdown.Moin2Markdown.retrieve_and_translate">
+
+        <code class="highlight language-python">
+retrieve_and_translate<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">revision</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Retrieve a wiki revision, and translate it to markdown</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>revision</code></td>
+<td><code>MoinEditEntry</code></td>
+<td>
+<p>The wiki revision object for the revision we want</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<p>If the revision maps to an empty object - ie it deleted the page, or
+similar, then a None object is returned.</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/moin2markdown.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">retrieve_and_translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="n">MoinEditEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Retrieve a wiki revision, and translate it to markdown</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        revision:    The wiki revision object for the revision we want</span>
+
+<span class="sd">    If the revision maps to an empty object - ie it deleted the page, or</span>
+<span class="sd">    similar, then a None object is returned.</span>
+
+<span class="sd">    """</span>
+    <span class="c1"># check if this revision has any content...</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">revision</span><span class="o">.</span><span class="n">wiki_content</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">lines</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">target</span> <span class="o">/=</span> <span class="n">revision</span><span class="o">.</span><span class="n">page_path_unescaped</span><span class="p">()</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">"action"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"recall"</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">"rev"</span><span class="p">]</span> <span class="o">=</span> <span class="n">revision</span><span class="o">.</span><span class="n">page_revision</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_cache</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">main_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_content_section</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">translated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">main_content</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">translated</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.moin2markdown.Moin2Markdown.translate">
+
+        <code class="highlight language-python">
+translate<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Translate HTML to Github Flavoured Markdown using pandoc</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/moin2markdown.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">"""Translate HTML to Github Flavoured Markdown using pandoc"""</span>
+    <span class="n">translated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pandoc</span><span class="p">(</span><span class="n">_in</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">translated</span><span class="o">.</span><span class="n">stdout</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../gitrevision/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Git Revision
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../users/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Users
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: ['navigation.instant', 'navigation.expand'],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.8c7e0a7e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

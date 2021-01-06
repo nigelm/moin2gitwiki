@@ -1,0 +1,1033 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Convert MoinMoin filesystem into github/gitlab/gitea type git based wiki">
+      
+      
+      
+      
+        <link rel="canonical" href="https://nigelm.github.io/moin2gitwiki/internal/users/">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
+    
+    
+      
+        <title>Users - moin2gitwiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3b61ea93.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.39b8e14a.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../css/mkdocstrings.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#moin2gitwiki.users" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://nigelm.github.io/moin2gitwiki/" title="moin2gitwiki" class="md-header-nav__button md-logo" aria-label="moin2gitwiki">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            moin2gitwiki
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Users
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/nigelm/moin2gitwiki/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    moin2gitwiki
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://nigelm.github.io/moin2gitwiki/" title="moin2gitwiki" class="md-nav__button md-logo" aria-label="moin2gitwiki">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    moin2gitwiki
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/nigelm/moin2gitwiki/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    moin2gitwiki
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../../commands/" class="md-nav__link">
+      Commands
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="../../changelog/" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  
+
+
+  
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      Internal
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Internal" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        Internal
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../context/" class="md-nav__link">
+      Context
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../fetch_cache/" class="md-nav__link">
+      Fetch Cache
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../gitrevision/" class="md-nav__link">
+      Git Revision
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../moin2markdown/" class="md-nav__link">
+      Moin To Markdown
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Users
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Users
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.users" class="md-nav__link">
+    moin2gitwiki.users
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUser" class="md-nav__link">
+    Moin2GitUser
+  </a>
+  
+    <nav class="md-nav" aria-label="Moin2GitUser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUser.load_user_from_file" class="md-nav__link">
+    load_user_from_file()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet" class="md-nav__link">
+    Moin2GitUserSet
+  </a>
+  
+    <nav class="md-nav" aria-label="Moin2GitUserSet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.create_from_users" class="md-nav__link">
+    create_from_users()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.get_user_by_id" class="md-nav__link">
+    get_user_by_id()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.get_user_by_id_or_anonymous" class="md-nav__link">
+    get_user_by_id_or_anonymous()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.get_user_by_name" class="md-nav__link">
+    get_user_by_name()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.load_users_from_file" class="md-nav__link">
+    load_users_from_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.load_users_from_wiki_data" class="md-nav__link">
+    load_users_from_wiki_data()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.save_users_to_file" class="md-nav__link">
+    save_users_to_file()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../wikiindex/" class="md-nav__link">
+      Wiki Index
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.users" class="md-nav__link">
+    moin2gitwiki.users
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUser" class="md-nav__link">
+    Moin2GitUser
+  </a>
+  
+    <nav class="md-nav" aria-label="Moin2GitUser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUser.load_user_from_file" class="md-nav__link">
+    load_user_from_file()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet" class="md-nav__link">
+    Moin2GitUserSet
+  </a>
+  
+    <nav class="md-nav" aria-label="Moin2GitUserSet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.create_from_users" class="md-nav__link">
+    create_from_users()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.get_user_by_id" class="md-nav__link">
+    get_user_by_id()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.get_user_by_id_or_anonymous" class="md-nav__link">
+    get_user_by_id_or_anonymous()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.get_user_by_name" class="md-nav__link">
+    get_user_by_name()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.load_users_from_file" class="md-nav__link">
+    load_users_from_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.load_users_from_wiki_data" class="md-nav__link">
+    load_users_from_wiki_data()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.users.Moin2GitUserSet.save_users_to_file" class="md-nav__link">
+    save_users_to_file()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/nigelm/moin2gitwiki/edit/master/docs/internal/users.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Users</h1>
+                
+                <div class="doc doc-object doc-module">
+<h2 class="hidden-toc" href="#moin2gitwiki.users" id="moin2gitwiki.users" style="visibility: hidden; position: absolute;">
+        </h2>
+<div class="doc doc-contents first">
+<div class="doc doc-children">
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUser">
+
+        <code>Moin2GitUser</code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Represents a Moin user - for mapping to git user commits</p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>moin_id</code></td>
+<td><code>str</code></td>
+<td>
+<p>MoinMoin user id - multi-component numeric string</p>
+</td>
+</tr>
+<tr>
+<td><code>moin_name</code></td>
+<td><code>str</code></td>
+<td>
+<p>The Moin username  - used as a git name</p>
+</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>str</code></td>
+<td>
+<p>Email address of the user account</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUser.load_user_from_file">
+
+        <code class="highlight language-python">
+load_user_from_file<span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Reads the user data in from a moin user config file</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">load_user_from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Reads the user data in from a moin user config file</span>
+<span class="sd">    """</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">moin_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">user_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^([a-z_]+)=(.*)$"</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"moin_id"</span><span class="p">:</span> <span class="n">moin_id</span><span class="p">,</span> <span class="s2">"moin_name"</span><span class="p">:</span> <span class="n">user_dict</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]}</span>
+    <span class="k">if</span> <span class="n">user_dict</span><span class="p">[</span><span class="s2">"email"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">user_dict</span><span class="p">[</span><span class="s2">"email"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"email"</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">"[^A-Za-z0-9@._-]"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">user_dict</span><span class="p">[</span><span class="s2">"email"</span><span class="p">])</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User added: </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">moin_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet">
+
+        <code>Moin2GitUserSet</code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Represents a set of Moin users for mapping into git</p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_map</code></td>
+<td><code>dict</code></td>
+<td>
+<p>maps moin user ids to Moin2GitUser objects</p>
+</td>
+</tr>
+<tr>
+<td><code>name_map</code></td>
+<td><code>dict</code></td>
+<td>
+<p>maps moin user names to Moin2GitUser objects</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.create_from_users">
+
+        <code class="highlight language-python">
+create_from_users<span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Builds a Moin2GitUserSet from a list of Moin2GitUser objects</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">create_from_users</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">users</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Builds a Moin2GitUserSet from a list of Moin2GitUser objects</span>
+<span class="sd">    """</span>
+    <span class="n">id_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">name_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+        <span class="n">id_map</span><span class="p">[</span><span class="n">user</span><span class="o">.</span><span class="n">moin_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="n">name_map</span><span class="p">[</span><span class="n">user</span><span class="o">.</span><span class="n">moin_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span>
+    <span class="c1"># make sure we have an anonymous entry for things we cannot put a user to</span>
+    <span class="k">if</span> <span class="s2">"anonymous"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name_map</span><span class="p">:</span>
+        <span class="n">anonymous</span> <span class="o">=</span> <span class="n">Moin2GitUser</span><span class="p">(</span>
+            <span class="n">moin_id</span><span class="o">=</span><span class="s2">"0000000000.00.00000"</span><span class="p">,</span>
+            <span class="n">moin_name</span><span class="o">=</span><span class="s2">"anonymous"</span><span class="p">,</span>
+            <span class="n">email</span><span class="o">=</span><span class="s2">"anonymous@example.org"</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">id_map</span><span class="p">[</span><span class="n">anonymous</span><span class="o">.</span><span class="n">moin_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">anonymous</span>
+        <span class="n">name_map</span><span class="p">[</span><span class="n">anonymous</span><span class="o">.</span><span class="n">moin_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">anonymous</span>
+    <span class="c1"># package all the users into a set</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Building user set object"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">id_map</span><span class="o">=</span><span class="n">id_map</span><span class="p">,</span> <span class="n">name_map</span><span class="o">=</span><span class="n">name_map</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.get_user_by_id">
+
+        <code class="highlight language-python">
+get_user_by_id<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Gets a Moin2GitUser by matching a moin id</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_user_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Gets a Moin2GitUser by matching a moin id</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_map</span><span class="p">[</span><span class="n">ident</span><span class="p">]</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.get_user_by_id_or_anonymous">
+
+        <code class="highlight language-python">
+get_user_by_id_or_anonymous<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Gets a Moin2GitUser by matching a moin id.  If non-existant returns the anonymous id</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_user_by_id_or_anonymous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Gets a Moin2GitUser by matching a moin id.  If non-existant returns the anonymous id</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">ident</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ident</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_map</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user_by_name</span><span class="p">(</span><span class="s2">"anonymous"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">ident</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.get_user_by_name">
+
+        <code class="highlight language-python">
+get_user_by_name<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Gets a Moin2GitUser by matching moin name</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_user_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Gets a Moin2GitUser by matching moin name</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_map</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.load_users_from_file">
+
+        <code class="highlight language-python">
+load_users_from_file<span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Builds a Moin2GitUserSet from a saved json file</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">load_users_from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Builds a Moin2GitUserSet from a saved json file</span>
+<span class="sd">    """</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading wiki users from </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">user_data_set</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">user_data_set</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">Moin2GitUser</span><span class="p">(</span><span class="o">**</span><span class="n">entry</span><span class="p">)</span>
+        <span class="n">users</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded user name </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">moin_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_from_users</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.load_users_from_wiki_data">
+
+        <code class="highlight language-python">
+load_users_from_wiki_data<span class="p">(</span><span class="n">wiki_data_path</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Builds a Moin2GitUserSet from the wiki filesystem</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">load_users_from_wiki_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">wiki_data_path</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Builds a Moin2GitUserSet from the wiki filesystem</span>
+<span class="sd">    """</span>
+    <span class="n">users_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wiki_data_path</span><span class="p">,</span> <span class="s2">"user"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading wiki users from </span><span class="si">{</span><span class="n">users_dir</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">moin_id</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">users_dir</span><span class="p">):</span>
+        <span class="c1"># check the moin id filename looks right</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\d+\.\d+\.\d+$"</span><span class="p">,</span> <span class="n">moin_id</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading user id </span><span class="si">{</span><span class="n">moin_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="n">Moin2GitUser</span><span class="o">.</span><span class="n">load_user_from_file</span><span class="p">(</span>
+                    <span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">users_dir</span><span class="p">,</span> <span class="n">moin_id</span><span class="p">),</span>
+                    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">users</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="k">continue</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_from_users</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.users.Moin2GitUserSet.save_users_to_file">
+
+        <code class="highlight language-python">
+save_users_to_file<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>Writes a Moin2GitUserSet to a saved json file</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/users.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">save_users_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Writes a Moin2GitUserSet to a saved json file</span>
+<span class="sd">    """</span>
+    <span class="n">user_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">user_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">asdict</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../moin2markdown/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Moin To Markdown
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../wikiindex/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Wiki Index
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: ['navigation.instant', 'navigation.expand'],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.8c7e0a7e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
