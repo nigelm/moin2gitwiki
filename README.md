@@ -1,6 +1,6 @@
 # MoinMoin To Git (Markdown) Wiki Converter
 
-[![ci](https://img.shields.io/travis/nigelm/moin2gitwiki.svg)](https://travis-ci.com/nigelm/moin2gitwiki)
+[![ci](https://img.shields.io/travis/com/nigelm/moin2gitwiki.svg)](https://travis-ci.com/nigelm/moin2gitwiki)
 [![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://nigelm.github.io/moin2gitwiki/)
 [![pypi version](https://img.shields.io/pypi/v/moin2gitwiki.svg)](https://pypi.python.org/pypi/moin2gitwiki)
 
