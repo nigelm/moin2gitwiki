@@ -1,5 +1,9 @@
 # MoinMoin To Git (Markdown) Wiki Converter
 
+[![ci](https://img.shields.io/travis/nigelm/moin2gitwiki.svg)](https://travis-ci.com/nigelm/moin2gitwiki)
+[![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://nigelm.github.io/moin2gitwiki/)
+[![pypi version](https://img.shields.io/pypi/v/moin2gitwiki.svg)](https://pypi.python.org/pypi/moin2gitwiki)
+
 App to convert a MoinMoin wiki file tree into a git based wiki as used on
 github, gitlab or gitea.
 
@@ -52,8 +56,13 @@ you only do once (or a few attempts) so raw speed is not needed.
 
 ## Installation
 
-I have not at this point made this available as a pypi package, although there
-should be a package file in the releases set on github.
+I have now made this available as a pypi package, in which case it can be
+installed by running
+
+    pip install moin2gitwiki
+
+However to use it you will also need to install the `pandoc` and `git`
+packages as these commands are run during the conversion.
 
 However it can be installed from the repo - it uses
 [`poetry`](https://python-poetry.org/) to manage dependancies etc, so the best
