@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+[0.4.0] - 2021-01-11
+--------------------
 - Some str/bytes fixes
 
 [0.3.0] - 2021-01-11
