@@ -9,6 +9,7 @@ Unreleased Changes
 
 <!-- insertion marker -->
 - Swap out `sh` for `subprocess` module for running pandoc
+- Strip extra divs that appear in output
 
 [0.2.0] - 2021-01-06
 --------------------

@@ -174,13 +174,17 @@ class Moin2Markdown:
             if tag.has_attr("class"):
                 del tag["class"]
         #
+        # This might not always work but removing all <div>s makes output cleaner
+        for tag in content.find_all("div"):
+            tag.unwrap()
+        #
         # now find all the images and see if they map to emojis
         # MoinMoin puts the emoji code in the title, so will purely match on that
         for tag in content.find_all("img"):
             if tag.has_attr("title") and tag["title"] in self.smiley_map:
                 tag.replace_with(" " + self.smiley_map[tag["title"]] + " ")
 
-        return str(content)
+        return "".join([str(x) for x in content.contents])
 
     def translate(self, input: str) -> str:
         """Translate HTML to Github Flavoured Markdown using pandoc"""
