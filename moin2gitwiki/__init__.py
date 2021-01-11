@@ -2,6 +2,6 @@
 
 __author__ = """Nigel Metheringham"""
 __email__ = "nigem@cpan.org"
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 # end
