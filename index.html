@@ -259,6 +259,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    Todo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -464,6 +471,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    Todo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -482,10 +496,13 @@
                 
                 
                 <h1 id="moinmoin-to-git-markdown-wiki-converter">MoinMoin To Git (Markdown) Wiki Converter</h1>
+<p><a href="https://travis-ci.com/nigelm/moin2gitwiki"><img alt="ci" src="https://img.shields.io/travis/nigelm/moin2gitwiki.svg" /></a>
+<a href="https://nigelm.github.io/moin2gitwiki/"><img alt="documentation" src="https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat" /></a>
+<a href="https://pypi.python.org/pypi/moin2gitwiki"><img alt="pypi version" src="https://img.shields.io/pypi/v/moin2gitwiki.svg" /></a></p>
 <p>App to convert a MoinMoin wiki file tree into a git based wiki as used on
 github, gitlab or gitea.</p>
 <h2 id="current-version">Current Version</h2>
-<p>Version: <code>0.2.0</code></p>
+<p>Version: <code>0.3.0</code></p>
 <h2 id="translation-method">Translation Method</h2>
 <p>Originally the intention was to translate purely by converting the MoinMoin
 markup to markdown markup - using the MoinMoin data retrieved from the
@@ -522,8 +539,12 @@ and edit.</p>
 <p>The overall process is not particularly fast.  But this should be something
 you only do once (or a few attempts) so raw speed is not needed.</p>
 <h2 id="installation">Installation</h2>
-<p>I have not at this point made this available as a pypi package, although there
-should be a package file in the releases set on github.</p>
+<p>I have now made this available as a pypi package, in which case it can be
+installed by running</p>
+<div class="highlight"><pre><span></span><code>pip install moin2gitwiki
+</code></pre></div>
+<p>However to use it you will also need to install the <code>pandoc</code> and <code>git</code>
+packages as these commands are run during the conversion.</p>
 <p>However it can be installed from the repo - it uses
 <a href="https://python-poetry.org/"><code>poetry</code></a> to manage dependancies etc, so the best
 way to make use of this is to install <a href="https://python-poetry.org/"><code>poetry</code></a>
@@ -533,6 +554,10 @@ for your python version and then:-</p>
 <p>the command can then be run as</p>
 <div class="highlight"><pre><span></span><code>poetry run moin2gitwiki ...
 </code></pre></div>
+<h2 id="todo">Todo</h2>
+<ul>
+<li>Make tests effective</li>
+</ul>
 <hr />
                 
               
