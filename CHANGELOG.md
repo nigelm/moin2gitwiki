@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+- Swap out `sh` for `subprocess` module for running pandoc
+
 [0.2.0] - 2021-01-06
 --------------------
 - Initial structure

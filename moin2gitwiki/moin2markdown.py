@@ -1,11 +1,11 @@
 import re
+import subprocess
 from pathlib import Path
 from typing import Optional
 
 import attr
 from bs4 import BeautifulSoup
 from furl import furl
-from sh import pandoc
 
 from .fetch_cache import FetchCache
 from .wikiindex import MoinEditEntry
@@ -37,9 +37,6 @@ class Moin2Markdown:
     url_prefix: furl = attr.ib()
     link_table: dict = attr.ib()
     ctx = attr.ib(repr=False)
-    #
-    # prebuilt sh setup
-    pandoc = pandoc.bake("-f", "html", "-t", "gfm")
     #
     # smiley mapping
     smiley_map = {
@@ -183,12 +180,17 @@ class Moin2Markdown:
             if tag.has_attr("title") and tag["title"] in self.smiley_map:
                 tag.replace_with(" " + self.smiley_map[tag["title"]] + " ")
 
-        return content.contents
+        return str(content)
 
     def translate(self, input: str) -> str:
         """Translate HTML to Github Flavoured Markdown using pandoc"""
-        translated = self.pandoc(_in=input)
-        return translated.stdout
+        process = subprocess.Popen(
+            ["pandoc", "-f", "html", "-t", "gfm"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+        (output, _) = process.communicate(input.encode("utf-8"))
+        return output.decode("utf-8")
 
 
 # end
