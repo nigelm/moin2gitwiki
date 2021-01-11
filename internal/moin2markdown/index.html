@@ -811,7 +811,7 @@ similar, then a None object is returned.</p>
 <details class="quote">
           <summary>Source code in <code>moin2gitwiki/moin2markdown.py</code></summary>
           <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">retrieve_and_translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="n">MoinEditEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">retrieve_and_translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="n">MoinEditEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
     <span class="sd">"""</span>
 <span class="sd">    Retrieve a wiki revision, and translate it to markdown</span>
 
@@ -853,7 +853,7 @@ translate<span class="p">(</span><span class="bp">self</span><span class="p">,</
 <details class="quote">
           <summary>Source code in <code>moin2gitwiki/moin2markdown.py</code></summary>
           <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
     <span class="sd">"""Translate HTML to Github Flavoured Markdown using pandoc"""</span>
     <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
         <span class="p">[</span><span class="s2">"pandoc"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="s2">"html"</span><span class="p">,</span> <span class="s2">"-t"</span><span class="p">,</span> <span class="s2">"gfm"</span><span class="p">],</span>
@@ -861,7 +861,7 @@ translate<span class="p">(</span><span class="bp">self</span><span class="p">,</
         <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">communicate</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span>
 </code></pre>
 </div>
 </details>
