@@ -104,7 +104,7 @@ class Moin2Markdown:
             ctx=ctx,
         )
 
-    def retrieve_and_translate(self, revision: MoinEditEntry) -> Optional[str]:
+    def retrieve_and_translate(self, revision: MoinEditEntry) -> Optional[bytes]:
         """
         Retrieve a wiki revision, and translate it to markdown
 
@@ -186,7 +186,7 @@ class Moin2Markdown:
 
         return "".join([str(x) for x in content.contents])
 
-    def translate(self, input: str) -> str:
+    def translate(self, input: str) -> bytes:
         """Translate HTML to Github Flavoured Markdown using pandoc"""
         process = subprocess.Popen(
             ["pandoc", "-f", "html", "-t", "gfm"],
@@ -194,7 +194,7 @@ class Moin2Markdown:
             stdout=subprocess.PIPE,
         )
         (output, _) = process.communicate(input.encode("utf-8"))
-        return output.decode("utf-8")
+        return output
 
 
 # end

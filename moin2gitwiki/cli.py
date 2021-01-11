@@ -230,7 +230,7 @@ def translate_page(ctx, cache_directory, url_prefix, page, version):
 
     The first argument is a page name, the second an integer revision.
 
-    The translation process is as described for the `fast-expor`a command.
+    The translation process is as described for the `fast-export` command.
     """
     #
     # build your initial revision set from the wiki data
