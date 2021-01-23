@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from furl import furl
 
 from .fetch_cache import FetchCache
+from .wikiindex import MoinEditEntries
 from .wikiindex import MoinEditEntry
 
 
@@ -35,7 +36,7 @@ class Moin2Markdown:
     # -- attributes
     fetch_cache: FetchCache = attr.ib()
     url_prefix: furl = attr.ib()
-    link_table: dict = attr.ib()
+    revisions: MoinEditEntries = attr.ib()
     ctx = attr.ib(repr=False)
     #
     # smiley mapping
@@ -79,7 +80,7 @@ class Moin2Markdown:
         ctx,
         cache_directory: Path,
         url_prefix: str,
-        link_table: dict,
+        revisions: MoinEditEntries,
     ):
         """
         Build a translator object
@@ -99,7 +100,7 @@ class Moin2Markdown:
         )
         return cls(
             fetch_cache=fetch_cache,
-            link_table=link_table,
+            revisions=revisions,
             url_prefix=furl(url_prefix),
             ctx=ctx,
         )
@@ -149,6 +150,8 @@ class Moin2Markdown:
         """
         soup = BeautifulSoup(html, "html.parser")
         content = soup.find(id="content")
+        if content is None:
+            return ""
         #
         # now strip out excess rubbish - anchor spans
         for tag in content.find_all(class_="anchor"):
@@ -162,11 +165,31 @@ class Moin2Markdown:
         for tag in content.find_all("a"):
             target = tag["href"]
             if target:
+                self.ctx.logger.debug(f"Trying to map link {target}")
                 url = self.url_prefix.copy().join(target)
                 if url.url.startswith(self.url_prefix.url):
-                    new_url = url.url[len(self.url_prefix.url) :]
-                    if new_url in self.link_table:
-                        tag["href"] = self.link_table[new_url]
+                    new_url = (
+                        url.copy().remove(query=True).url[len(self.url_prefix.url) :]
+                    )
+                    if len(str(url.query)) == 0:
+                        # no query - this is a conventional link
+                        new_target = self.revisions.get_new_link_target(new_url)
+                        if new_target:
+                            tag["href"] = new_target
+                            self.ctx.logger.debug(f"Normal map -> {new_target}")
+                    elif (
+                        "action" in url.query.params
+                        and "target" in url.query.params
+                        and url.query.params["action"] == "AttachFile"
+                    ):
+                        attach_target = url.query.params["target"]
+                        new_target = self.revisions.get_new_attachment_link_target(
+                            new_url,
+                            attach_target,
+                        )
+                        if new_target:
+                            tag["href"] = new_target
+                            self.ctx.logger.debug(f"Attach map -> {new_target}")
                     else:
                         tag.unwrap()
             #
@@ -174,15 +197,33 @@ class Moin2Markdown:
             if tag.has_attr("class"):
                 del tag["class"]
         #
-        # This might not always work but removing all <div>s makes output cleaner
-        for tag in content.find_all("div"):
-            tag.unwrap()
-        #
         # now find all the images and see if they map to emojis
         # MoinMoin puts the emoji code in the title, so will purely match on that
         for tag in content.find_all("img"):
+            target = tag["src"]
             if tag.has_attr("title") and tag["title"] in self.smiley_map:
                 tag.replace_with(" " + self.smiley_map[tag["title"]] + " ")
+            elif target:
+                # now find all the images, and if an attachment within the wiki, rewrite
+                url = self.url_prefix.copy().join(target)
+                if url.url.startswith(self.url_prefix.url):
+                    new_url = url.remove(query=True).url[len(self.url_prefix.url) :]
+                    if (
+                        "action" in url.query.params
+                        and "target" in url.query.params
+                        and url.query.params["action"] == "AttachFile"
+                    ):
+                        attach_target = url.query.params["target"]
+                        new_target = self.revisions.get_new_attachment_link_target(
+                            new_url,
+                            attach_target,
+                        )
+                        if new_target:
+                            tag["href"] = new_target
+        #
+        # This might not always work but removing all <div>s makes output cleaner
+        for tag in content.find_all("div"):
+            tag.unwrap()
 
         return "".join([str(x) for x in content.contents])
 

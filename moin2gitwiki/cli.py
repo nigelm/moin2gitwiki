@@ -174,18 +174,12 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
     revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
     click.echo(click.style(f"Read {revisions.count()} wiki revisions", fg="green"))
     #
-    # build a link_table
-    link_table = {
-        revision.page_name_unescaped(): revision.markdown_page_name()
-        for revision in revisions.entries
-    }
-    #
     # build the translator
     translator = Moin2Markdown.create_translator(
         ctx=ctx,
         cache_directory=Path(cache_directory),
         url_prefix=url_prefix,
-        link_table=link_table,
+        revisions=revisions,
     )
     #
     # build the output git instance
@@ -237,25 +231,19 @@ def translate_page(ctx, cache_directory, url_prefix, page, version):
     revisions = MoinEditEntries.create_edit_entries(ctx=ctx)
     click.echo(click.style(f"Read {revisions.count()} wiki revisions", fg="green"))
     #
-    # build a link_table
-    link_table = {
-        revision.page_name_unescaped(): revision.markdown_page_name()
-        for revision in revisions.entries
-    }
-    #
     # build the translator
     translator = Moin2Markdown.create_translator(
         ctx=ctx,
         cache_directory=Path(cache_directory),
         url_prefix=url_prefix,
-        link_table=link_table,
+        revisions=revisions,
     )
     #
     # find the page and translate it
     for revision in revisions.entries:
         if revision.page_name == page and int(revision.page_revision) == version:
             content = translator.retrieve_and_translate(revision=revision)
-            print(content)
+            print(content.decode("utf-8"))
 
 
 # -----------------------------------------------------------------------

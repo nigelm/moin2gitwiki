@@ -3,6 +3,7 @@ import typing
 import attr
 
 from .wikiindex import MoinEditEntry
+from .wikiindex import MoinEditType
 
 
 @attr.s(kw_only=True, slots=True)
@@ -43,6 +44,8 @@ class GitExportStream:
         name = revision.markdown_page_path()
         if content is not None:
             blob_ref = self.output_blob(content)
+        elif revision.edit_type == MoinEditType.ATTACH:
+            blob_ref = self.output_blob(revision.attachment_content_bytes())
         if self.last_commit_mark is None:
             self.write_string(f"reset {self.branch}\n")
         self.write_string(f"commit {self.branch}\n")
@@ -52,23 +55,32 @@ class GitExportStream:
         if revision.comment != "":
             self.output_data_string(f"{revision.comment}\n")
         else:
-            if content is not None:
+            if revision.edit_type == MoinEditType.PAGE:
                 self.output_data_string(f"Add/Update {name}\n")
-            else:
+            elif revision.edit_type == MoinEditType.RENAME:
+                self.output_data_string(f"Rename to {name}\n")
+            elif revision.edit_type == MoinEditType.DELETE:
                 self.output_data_string(f"Delete {name}\n")
+            elif revision.edit_type == MoinEditType.ATTACH:
+                self.output_data_string(f"Attach {revision.attachment} to {name}\n")
+        # commit mark
         if self.last_commit_mark is not None:
             self.write_string(f"from :{self.last_commit_mark}\n")
-        if content is None:
-            self.write_string(f"D {name}\n\n")
-        else:
-            if (
-                revision.previous_page_name is not None
-                and revision.previous_page_name != revision.page_name
-            ):
-                self.write_string(
-                    f"D {revision.markdown_transform(revision.previous_page_name)}\n",
-                )
+        # data change
+        if revision.edit_type == MoinEditType.PAGE:
             self.write_string(f"M 100644 :{blob_ref} {name}\n\n")
+        elif revision.edit_type == MoinEditType.RENAME:
+            self.write_string(
+                f"D {revision.markdown_transform(revision.previous_page_name)}\n",
+            )
+            self.write_string(f"M 100644 :{blob_ref} {name}\n\n")
+        elif revision.edit_type == MoinEditType.DELETE:
+            self.write_string(f"D {name}\n\n")
+        elif revision.edit_type == MoinEditType.ATTACH:
+            self.write_string(
+                f"M 100644 :{blob_ref} {revision.attachment_destination()}\n\n",
+            )
+
         self.last_commit_mark = commit_ref
         self.ctx.logger.debug(f"Written commit {commit_ref}")
 

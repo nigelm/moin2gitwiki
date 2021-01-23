@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+- Handle attachments in the wiki
+
 [0.4.0] - 2021-01-11
 --------------------
 - Some str/bytes fixes
