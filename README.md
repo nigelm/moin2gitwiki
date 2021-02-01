@@ -49,10 +49,20 @@ many types of tables.  Some complicated markup or complex tables end up being
 passed through as HTML - which displays correctly but is less easy to parse
 and edit.
 
+Attachments that are available in the wiki are also handled - they are put
+into a `_attachments` directory under a subdirectory named for the original
+page directory name.  Links to attachments should be handled correctly.
+
 ## Issues
 
 The overall process is not particularly fast.  But this should be something
 you only do once (or a few attempts) so raw speed is not needed.
+
+Attachments are not versioned by MoinMon.  This means any attachment that was
+deleted from MoinMoin is no longer available to put into the converted wiki.
+Any attachment that was updated a few times is only available in the last
+version (but will probably be inserted into the history at the point where it
+first appeared but with the latest content).
 
 ## Installation
 
