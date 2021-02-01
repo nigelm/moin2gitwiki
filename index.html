@@ -496,13 +496,13 @@
                 
                 
                 <h1 id="moinmoin-to-git-markdown-wiki-converter">MoinMoin To Git (Markdown) Wiki Converter</h1>
-<p><a href="https://travis-ci.com/nigelm/moin2gitwiki"><img alt="ci" src="https://img.shields.io/travis/nigelm/moin2gitwiki.svg" /></a>
+<p><a href="https://travis-ci.com/nigelm/moin2gitwiki"><img alt="ci" src="https://img.shields.io/travis/com/nigelm/moin2gitwiki.svg" /></a>
 <a href="https://nigelm.github.io/moin2gitwiki/"><img alt="documentation" src="https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat" /></a>
 <a href="https://pypi.python.org/pypi/moin2gitwiki"><img alt="pypi version" src="https://img.shields.io/pypi/v/moin2gitwiki.svg" /></a></p>
 <p>App to convert a MoinMoin wiki file tree into a git based wiki as used on
 github, gitlab or gitea.</p>
 <h2 id="current-version">Current Version</h2>
-<p>Version: <code>0.4.0</code></p>
+<p>Version: <code>0.5.0</code></p>
 <h2 id="translation-method">Translation Method</h2>
 <p>Originally the intention was to translate purely by converting the MoinMoin
 markup to markdown markup - using the MoinMoin data retrieved from the
@@ -535,9 +535,17 @@ html), and some light editing applied to simplify the HTML - specifically:-</p>
 many types of tables.  Some complicated markup or complex tables end up being
 passed through as HTML - which displays correctly but is less easy to parse
 and edit.</p>
+<p>Attachments that are available in the wiki are also handled - they are put
+into a <code>_attachments</code> directory under a subdirectory named for the original
+page directory name.  Links to attachments should be handled correctly.</p>
 <h2 id="issues">Issues</h2>
 <p>The overall process is not particularly fast.  But this should be something
 you only do once (or a few attempts) so raw speed is not needed.</p>
+<p>Attachments are not versioned by MoinMon.  This means any attachment that was
+deleted from MoinMoin is no longer available to put into the converted wiki.
+Any attachment that was updated a few times is only available in the last
+version (but will probably be inserted into the history at the point where it
+first appeared but with the latest content).</p>
 <h2 id="installation">Installation</h2>
 <p>I have now made this available as a pypi package, in which case it can be
 installed by running</p>

@@ -406,6 +406,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditEntry.attachment_content_bytes" class="md-nav__link">
+    attachment_content_bytes()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditEntry.attachment_content_path" class="md-nav__link">
+    attachment_content_path()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditEntry.attachment_destination" class="md-nav__link">
+    attachment_destination()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#moin2gitwiki.wikiindex.MoinEditEntry.markdown_page_name" class="md-nav__link">
     markdown_page_name()
   </a>
@@ -470,6 +491,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditType" class="md-nav__link">
+    MoinEditType
+  </a>
   
 </li>
       
@@ -543,6 +571,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditEntry.attachment_content_bytes" class="md-nav__link">
+    attachment_content_bytes()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditEntry.attachment_content_path" class="md-nav__link">
+    attachment_content_path()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditEntry.attachment_destination" class="md-nav__link">
+    attachment_destination()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#moin2gitwiki.wikiindex.MoinEditEntry.markdown_page_name" class="md-nav__link">
     markdown_page_name()
   </a>
@@ -610,6 +659,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#moin2gitwiki.wikiindex.MoinEditType" class="md-nav__link">
+    MoinEditType
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -662,7 +718,7 @@ create_home_page<span class="p">(</span><span class="bp">self</span><span class=
     <span class="n">revision</span> <span class="o">=</span> <span class="n">MoinEditEntry</span><span class="p">(</span>
         <span class="n">edit_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
         <span class="n">page_revision</span><span class="o">=</span><span class="s2">"1"</span><span class="p">,</span>
-        <span class="n">edit_type</span><span class="o">=</span><span class="s2">"SAVENEW"</span><span class="p">,</span>
+        <span class="n">edit_type</span><span class="o">=</span><span class="n">MoinEditType</span><span class="o">.</span><span class="n">PAGE</span><span class="p">,</span>
         <span class="n">page_name</span><span class="o">=</span><span class="s2">"Home"</span><span class="p">,</span>
         <span class="n">attachment</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
         <span class="n">comment</span><span class="o">=</span><span class="s2">"Synthetic Home Page"</span><span class="p">,</span>
@@ -724,7 +780,7 @@ create_home_page<span class="p">(</span><span class="bp">self</span><span class=
 </tr>
 <tr>
 <td><code>edit_type</code></td>
-<td><code>str</code></td>
+<td><code>MoinEditType</code></td>
 <td>
 <p>Moin edit type</p>
 </td>
@@ -781,6 +837,83 @@ create_home_page<span class="p">(</span><span class="bp">self</span><span class=
 </tbody>
 </table>
 <div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.wikiindex.MoinEditEntry.attachment_content_bytes">
+
+        <code class="highlight language-python">
+attachment_content_bytes<span class="p">(</span><span class="bp">self</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>The content of the attachment retrieved as a byte string</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/wikiindex.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">attachment_content_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">"""The content of the attachment retrieved as a byte string"""</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attachment_content_path</span><span class="p">()</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.wikiindex.MoinEditEntry.attachment_content_path">
+
+        <code class="highlight language-python">
+attachment_content_path<span class="p">(</span><span class="bp">self</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>The file pathname of the attachment file</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/wikiindex.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">attachment_content_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">"""The file pathname of the attachment file"""</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attachment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No attachment path set"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">moin_data</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span>
+        <span class="s2">"pages"</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page_path</span><span class="p">,</span>
+        <span class="s2">"attachments"</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attachment</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="moin2gitwiki.wikiindex.MoinEditEntry.attachment_destination">
+
+        <code class="highlight language-python">
+attachment_destination<span class="p">(</span><span class="bp">self</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<p>The new pathname of the attachment file</p>
+<details class="quote">
+          <summary>Source code in <code>moin2gitwiki/wikiindex.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">attachment_destination</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">"""The new pathname of the attachment file"""</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attachment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No attachment path set"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="s2">"_attachments"</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page_path</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attachment</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
 <div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="moin2gitwiki.wikiindex.MoinEditEntry.markdown_page_name">
 
@@ -986,6 +1119,30 @@ wiki_content_path<span class="p">(</span><span class="bp">self</span><span class
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="moin2gitwiki.wikiindex.MoinEditType">
+
+        <code>MoinEditType</code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>An enumeration.</p>
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
 </div>
 </div>
 </div>

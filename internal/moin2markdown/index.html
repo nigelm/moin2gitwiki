@@ -559,7 +559,7 @@
 </tr>
 <tr>
 <td><code>link_table</code></td>
-<td><code>dict</code></td>
+<td><code></code></td>
 <td>
 <p>A mapping of Moin unescaped names to page names</p>
 </td>
@@ -578,7 +578,7 @@
 <h3 class="doc doc-heading" id="moin2gitwiki.moin2markdown.Moin2Markdown.create_translator">
 
         <code class="highlight language-python">
-create_translator<span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">cache_directory</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">,</span> <span class="n">link_table</span><span class="p">)</span>        </code>
+create_translator<span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">cache_directory</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">,</span> <span class="n">revisions</span><span class="p">)</span>        </code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
@@ -624,7 +624,7 @@ create_translator<span class="p">(</span><span class="n">ctx</span><span class="
 </tr>
 <tr>
 <td><code>link_table</code></td>
-<td><code>dict</code></td>
+<td><code></code></td>
 <td>
 <p>A translation table for wiki links</p>
 </td>
@@ -641,7 +641,7 @@ create_translator<span class="p">(</span><span class="n">ctx</span><span class="
     <span class="n">ctx</span><span class="p">,</span>
     <span class="n">cache_directory</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">url_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">link_table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">revisions</span><span class="p">:</span> <span class="n">MoinEditEntries</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Build a translator object</span>
@@ -661,7 +661,7 @@ create_translator<span class="p">(</span><span class="n">ctx</span><span class="
     <span class="p">)</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
         <span class="n">fetch_cache</span><span class="o">=</span><span class="n">fetch_cache</span><span class="p">,</span>
-        <span class="n">link_table</span><span class="o">=</span><span class="n">link_table</span><span class="p">,</span>
+        <span class="n">revisions</span><span class="o">=</span><span class="n">revisions</span><span class="p">,</span>
         <span class="n">url_prefix</span><span class="o">=</span><span class="n">furl</span><span class="p">(</span><span class="n">url_prefix</span><span class="p">),</span>
         <span class="n">ctx</span><span class="o">=</span><span class="n">ctx</span><span class="p">,</span>
     <span class="p">)</span>
@@ -734,6 +734,8 @@ Simplification consists of:-</p>
 <span class="sd">    """</span>
     <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s2">"html.parser"</span><span class="p">)</span>
     <span class="n">content</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">"content"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">""</span>
     <span class="c1">#</span>
     <span class="c1"># now strip out excess rubbish - anchor spans</span>
     <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s2">"anchor"</span><span class="p">):</span>
@@ -747,11 +749,31 @@ Simplification consists of:-</p>
     <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"a"</span><span class="p">):</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">target</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Trying to map link </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
-                <span class="n">new_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="p">:]</span>
-                <span class="k">if</span> <span class="n">new_url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">link_table</span><span class="p">:</span>
-                    <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">link_table</span><span class="p">[</span><span class="n">new_url</span><span class="p">]</span>
+                <span class="n">new_url</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">url</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="p">:]</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># no query - this is a conventional link</span>
+                    <span class="n">new_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">revisions</span><span class="o">.</span><span class="n">get_new_link_target</span><span class="p">(</span><span class="n">new_url</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_target</span><span class="p">:</span>
+                        <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_target</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Normal map -&gt; </span><span class="si">{</span><span class="n">new_target</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="p">(</span>
+                    <span class="s2">"action"</span> <span class="ow">in</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span>
+                    <span class="ow">and</span> <span class="s2">"target"</span> <span class="ow">in</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span>
+                    <span class="ow">and</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">"action"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"AttachFile"</span>
+                <span class="p">):</span>
+                    <span class="n">attach_target</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">"target"</span><span class="p">]</span>
+                    <span class="n">new_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">revisions</span><span class="o">.</span><span class="n">get_new_attachment_link_target</span><span class="p">(</span>
+                        <span class="n">new_url</span><span class="p">,</span>
+                        <span class="n">attach_target</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_target</span><span class="p">:</span>
+                        <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_target</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Attach map -&gt; </span><span class="si">{</span><span class="n">new_target</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">tag</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
         <span class="c1">#</span>
@@ -759,15 +781,33 @@ Simplification consists of:-</p>
         <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">):</span>
             <span class="k">del</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"class"</span><span class="p">]</span>
     <span class="c1">#</span>
-    <span class="c1"># This might not always work but removing all &lt;div&gt;s makes output cleaner</span>
-    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"div"</span><span class="p">):</span>
-        <span class="n">tag</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
-    <span class="c1">#</span>
     <span class="c1"># now find all the images and see if they map to emojis</span>
     <span class="c1"># MoinMoin puts the emoji code in the title, so will purely match on that</span>
     <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"img"</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"src"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">smiley_map</span><span class="p">:</span>
             <span class="n">tag</span><span class="o">.</span><span class="n">replace_with</span><span class="p">(</span><span class="s2">" "</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">smiley_map</span><span class="p">[</span><span class="n">tag</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]]</span> <span class="o">+</span> <span class="s2">" "</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">target</span><span class="p">:</span>
+            <span class="c1"># now find all the images, and if an attachment within the wiki, rewrite</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
+                <span class="n">new_url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="p">:]</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="s2">"action"</span> <span class="ow">in</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span>
+                    <span class="ow">and</span> <span class="s2">"target"</span> <span class="ow">in</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span>
+                    <span class="ow">and</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">"action"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"AttachFile"</span>
+                <span class="p">):</span>
+                    <span class="n">attach_target</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">"target"</span><span class="p">]</span>
+                    <span class="n">new_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">revisions</span><span class="o">.</span><span class="n">get_new_attachment_link_target</span><span class="p">(</span>
+                        <span class="n">new_url</span><span class="p">,</span>
+                        <span class="n">attach_target</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_target</span><span class="p">:</span>
+                        <span class="n">tag</span><span class="p">[</span><span class="s2">"href"</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_target</span>
+    <span class="c1">#</span>
+    <span class="c1"># This might not always work but removing all &lt;div&gt;s makes output cleaner</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"div"</span><span class="p">):</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">contents</span><span class="p">])</span>
 </code></pre>
