@@ -133,12 +133,13 @@ def save_users(ctx, filename):
     default="http://localhost/jrtwiki/",
     envvar="MOIN2GIT_PREFIX",
 )
+@click.option("--home-page/--no-home-page", default=True)
 @click.argument(
     "destination",
     type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
 @click.pass_obj
-def fast_export(ctx, cache_directory, url_prefix, destination):
+def fast_export(ctx, cache_directory, url_prefix, home_page, destination):
     """
     Git fast-export all the revisions in the wiki into markdown git wiki form
 
@@ -195,6 +196,7 @@ def fast_export(ctx, cache_directory, url_prefix, destination):
                     revision=revision,
                     content=content,
                 )
+        if home_page:
             revision, content = revisions.create_home_page()
             export.add_wiki_revision(revision=revision, content=content.encode("utf-8"))
         export.end_stream()

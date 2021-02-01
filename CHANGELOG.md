@@ -8,6 +8,7 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+- Make home page generation optional
 - Handle attachments in the wiki
 
 [0.4.0] - 2021-01-11
