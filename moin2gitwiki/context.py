@@ -7,6 +7,7 @@ state information in it such as the logging objects.
 import logging.handlers
 import sys
 from pathlib import Path
+from typing import Dict
 
 import attr
 
@@ -46,6 +47,7 @@ class Moin2GitContext:
     syslog: bool = attr.ib(default=False)
     debug: bool = attr.ib(default=False)
     verbose: bool = attr.ib(default=False)
+    proxies: Dict[str, str] = attr.ib(default={})
 
     @classmethod
     def create_context(cls, **kwargs):
@@ -63,6 +65,14 @@ class Moin2GitContext:
         #
         # make the paths absolute
         kwargs["moin_data"] = Path(kwargs["moin_data"]).resolve(strict=True)
+        #
+        # get the proxies
+        proxies: Dict[str, str] = {}
+        if "proxies" in kwargs:
+            for proxy_setting in kwargs["proxies"]:
+                key, value = proxy_setting.split("=", maxsplit=1)
+                proxies[key] = value
+        kwargs["proxies"] = proxies
         #
         # build the context object
         context = cls(**kwargs)

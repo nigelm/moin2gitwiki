@@ -33,9 +33,10 @@ from .wikiindex import MoinEditEntries
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
     envvar="MOIN2GIT_USERS",
 )
+@click.option("--proxy", multiple=True, default=[], envvar="MOIN2GIT_PROXY")
 @click.version_option(__version__)
 @click.pass_context
-def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
+def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map, proxy):
     """
     MoinMoin To Git Wiki Tools Command Line Utility
 
@@ -79,6 +80,7 @@ def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map):
         verbose=verbose,
         moin_data=moin_data,
         user_map=user_map,
+        proxies=proxy,
     )
 
 

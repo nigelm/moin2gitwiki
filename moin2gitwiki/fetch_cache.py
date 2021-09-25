@@ -28,6 +28,7 @@ class FetchCache:
     index_path: Path = attr.ib()
     cache_map: dict = attr.ib(default={})
     ctx = attr.ib(repr=False)
+    session: requests.sessions.Session = attr.ib()
 
     @classmethod
     def initialise_cache(cls, cache_directory: Path, ctx):
@@ -53,6 +54,11 @@ class FetchCache:
             cache_map = {}
             cls.write_index(index_path=index_path, cache_map=cache_map)
         #
+        # build the requests session
+        session = requests.Session()
+        if len(ctx.proxies) > 0:
+            session.proxies.update(ctx.proxies)
+        #
         # build and return the object
         ctx.logger.debug(f"Building cache in directory {cache_directory}")
         return cls(
@@ -60,6 +66,7 @@ class FetchCache:
             index_path=index_path,
             cache_map=cache_map,
             ctx=ctx,
+            session=requests.Session(),
         )
 
     @classmethod
@@ -87,7 +94,13 @@ class FetchCache:
         item_path = item_path = self.cache_directory.joinpath(item_name)
         self.ctx.logger.debug(f"Fetching {url}")
         try:
-            response = requests.get(url)
+            response = requests.get(
+                url,
+                proxies=dict(
+                    http="socks5h://localhost:5555",
+                    https="socks5h://localhost:5555",
+                ),
+            )
             content = response.text
         except OSError:
             self.ctx.logger.warning(f"No response to {url}")
