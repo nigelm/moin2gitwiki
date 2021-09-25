@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+[0.6.0] - 2021-09-25
+--------------------
 - Improvements to home page generation
 - Fix image linking which could presumably have never worked!
 - Add proxy support
