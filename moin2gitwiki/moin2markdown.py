@@ -231,6 +231,14 @@ class Moin2Markdown:
             # strip any class attributes on links - tend to upset the translator
             if tag.has_attr("class"):
                 del tag["class"]
+
+        #
+        # The forms within the data are basically useless - strip the form and input fields
+        for tag in content.find_all("form"):
+            tag.unwrap()
+        for tag in content.find_all("input"):
+            tag.decompose()
+
         #
         # This might not always work but removing all <div>s makes output cleaner
         for tag in content.find_all("div"):
