@@ -240,13 +240,23 @@ class MoinEditEntries:
             user=self.ctx.users.get_user_by_id_or_anonymous("0"),
             ctx=self.ctx,
         )
-        pages = set()
+        pages = {}
         for entry in self.entries:
-            if entry.page_name.find("(2f)") < 0:
-                pages.add(entry.markdown_page_name())
+            page_path = entry.markdown_page_name()
+            page_split = entry.page_name.split("(2f)")
+            page_name = page_split.pop()
+            pages[page_path] = (
+                len(page_split) * "  "
+            ) + f"- [{page_name}]({page_path})\n"
+            while len(page_split) > 0:
+                page_path = "_".join(page_split)
+                page_name = page_split.pop()
+                if page_path not in pages:
+                    pages[page_path] = (len(page_split) * "  ") + f"- {page_name}\n"
+
         content = "# Home Page\n\n"
-        for item in sorted(pages):
-            content += f"- [{item}]({item})\n"
+        for item in sorted(pages.keys()):
+            content += pages[item]
         content += "\n----\n"
 
         return (revision, content)
@@ -260,8 +270,11 @@ class MoinEditEntries:
     def get_new_attachment_link_target(self, link, attachment):
         key = "\t".join([link, attachment])
         if key in self.attachment_link_table:
-            return self.attachment_link_table[key].attachment_destination()
+            destination = self.attachment_link_table[key].attachment_destination()
+            self.ctx.logger.debug(f"Attachment {link} {attachment} -> {destination}")
+            return destination
         else:
+            self.ctx.logger.debug(f"Attachment no map for {link} {attachment}")
             return None
 
 

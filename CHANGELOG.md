@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+- Improvements to home page generation
+
 [0.5.0] - 2021-02-01
 --------------------
 - Make home page generation optional
