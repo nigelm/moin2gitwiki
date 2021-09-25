@@ -9,6 +9,7 @@ Unreleased Changes
 
 <!-- insertion marker -->
 - Improvements to home page generation
+- Fix image linking which could presumably have never worked!
 
 [0.5.0] - 2021-02-01
 --------------------

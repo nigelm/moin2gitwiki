@@ -201,13 +201,17 @@ class Moin2Markdown:
         # MoinMoin puts the emoji code in the title, so will purely match on that
         for tag in content.find_all("img"):
             target = tag["src"]
+            self.ctx.logger.debug(f"Image target {target}")
             if tag.has_attr("title") and tag["title"] in self.smiley_map:
                 tag.replace_with(" " + self.smiley_map[tag["title"]] + " ")
             elif target:
                 # now find all the images, and if an attachment within the wiki, rewrite
                 url = self.url_prefix.copy().join(target)
                 if url.url.startswith(self.url_prefix.url):
-                    new_url = url.remove(query=True).url[len(self.url_prefix.url) :]
+                    new_url = (
+                        url.copy().remove(query=True).url[len(self.url_prefix.url) :]
+                    )
+                    self.ctx.logger.debug(f"Image params {url.query.params}")
                     if (
                         "action" in url.query.params
                         and "target" in url.query.params
@@ -219,7 +223,14 @@ class Moin2Markdown:
                             attach_target,
                         )
                         if new_target:
-                            tag["href"] = new_target
+                            tag["src"] = new_target
+                            self.ctx.logger.debug(f"Image mapped to {new_target}")
+                else:
+                    self.ctx.logger.debug(f"Not mapped - {url.query.params}")
+            #
+            # strip any class attributes on links - tend to upset the translator
+            if tag.has_attr("class"):
+                del tag["class"]
         #
         # This might not always work but removing all <div>s makes output cleaner
         for tag in content.find_all("div"):
