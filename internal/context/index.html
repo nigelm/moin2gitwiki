@@ -598,6 +598,14 @@ create_context<span class="p">(</span><span class="o">**</span><span class="n">k
     <span class="c1"># make the paths absolute</span>
     <span class="n">kwargs</span><span class="p">[</span><span class="s2">"moin_data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">"moin_data"</span><span class="p">])</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="c1">#</span>
+    <span class="c1"># get the proxies</span>
+    <span class="n">proxies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s2">"proxies"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">proxy_setting</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"proxies"</span><span class="p">]:</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">proxy_setting</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">proxies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">"proxies"</span><span class="p">]</span> <span class="o">=</span> <span class="n">proxies</span>
+    <span class="c1">#</span>
     <span class="c1"># build the context object</span>
     <span class="n">context</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">context</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">()</span>

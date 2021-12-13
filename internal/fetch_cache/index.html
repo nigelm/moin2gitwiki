@@ -597,7 +597,13 @@ fetch<span class="p">(</span><span class="bp">self</span><span class="p">,</span
     <span class="n">item_path</span> <span class="o">=</span> <span class="n">item_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_directory</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">item_name</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Fetching </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="n">proxies</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">http</span><span class="o">=</span><span class="s2">"socks5h://localhost:5555"</span><span class="p">,</span>
+                <span class="n">https</span><span class="o">=</span><span class="s2">"socks5h://localhost:5555"</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No response to </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
@@ -660,6 +666,11 @@ existing <code>index.json</code> or writes an empty one.</p>
         <span class="n">cache_map</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">write_index</span><span class="p">(</span><span class="n">index_path</span><span class="o">=</span><span class="n">index_path</span><span class="p">,</span> <span class="n">cache_map</span><span class="o">=</span><span class="n">cache_map</span><span class="p">)</span>
     <span class="c1">#</span>
+    <span class="c1"># build the requests session</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">proxies</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">proxies</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">proxies</span><span class="p">)</span>
+    <span class="c1">#</span>
     <span class="c1"># build and return the object</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Building cache in directory </span><span class="si">{</span><span class="n">cache_directory</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
@@ -667,6 +678,7 @@ existing <code>index.json</code> or writes an empty one.</p>
         <span class="n">index_path</span><span class="o">=</span><span class="n">index_path</span><span class="p">,</span>
         <span class="n">cache_map</span><span class="o">=</span><span class="n">cache_map</span><span class="p">,</span>
         <span class="n">ctx</span><span class="o">=</span><span class="n">ctx</span><span class="p">,</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">(),</span>
     <span class="p">)</span>
 </code></pre>
 </div>
