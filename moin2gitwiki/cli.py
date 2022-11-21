@@ -7,6 +7,7 @@ internals handling does not parse click decorators very well :-(
 """
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 import click
@@ -74,6 +75,10 @@ def moin2gitwiki(ctx, syslog, verbose, debug, moin_data, user_map, proxy):
     information.
 
     """
+    # this is to work around https://bugs.launchpad.net/beautifulsoup/+bug/1471755
+    # see https://github.com/nigelm/moin2gitwiki/issues/3
+    sys.setrecursionlimit(4000)
+
     ctx.obj = Moin2GitContext.create_context(
         syslog=syslog,
         debug=debug,
