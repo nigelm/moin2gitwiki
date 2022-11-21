@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+[0.7.0] - 2022-11-21
+--------------------
 - fix: remove hardwired proxy settings
 - fix: add recursion limit for beautiful soup
 - fix: updated pytest
