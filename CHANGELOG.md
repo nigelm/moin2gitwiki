@@ -8,6 +8,11 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+- fix: remove hardwired proxy settings
+- fix: add recursion limit for beautiful soup
+- fix: updated pytest
+- fix: change startup to not require --moin-data for check
+
 [0.6.0] - 2021-09-25
 --------------------
 - Improvements to home page generation
