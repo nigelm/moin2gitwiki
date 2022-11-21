@@ -94,13 +94,7 @@ class FetchCache:
         item_path = item_path = self.cache_directory.joinpath(item_name)
         self.ctx.logger.debug(f"Fetching {url}")
         try:
-            response = requests.get(
-                url,
-                proxies=dict(
-                    http="socks5h://localhost:5555",
-                    https="socks5h://localhost:5555",
-                ),
-            )
+            response = requests.get(url, proxies=self.ctx.proxies)
             content = response.text
         except OSError:
             self.ctx.logger.warning(f"No response to {url}")
