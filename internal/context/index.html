@@ -549,7 +549,7 @@ state information in it such as the logging objects.</p>
 </tr>
 <tr>
 <td><code>moin_data</code></td>
-<td><code>Path</code></td>
+<td><code></code></td>
 <td>
 <p>Path of the MoinMoin data directory</p>
 </td>
@@ -591,20 +591,27 @@ create_context<span class="p">(</span><span class="o">**</span><span class="n">k
     <span class="k">if</span> <span class="s2">"logger"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"moin2gitwiki"</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">"logger"</span><span class="p">]</span> <span class="o">=</span> <span class="n">logger</span>
+    <span class="k">if</span> <span class="s2">"moin_data"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">moin_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"moin_data"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"moin_data"</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">moin_data</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s2">"user_map"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">user_map</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"user_map"</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"user_map"</span><span class="p">]</span>
-    <span class="c1">#</span>
-    <span class="c1"># make the paths absolute</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s2">"moin_data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">"moin_data"</span><span class="p">])</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="c1">#</span>
-    <span class="c1"># get the proxies</span>
-    <span class="n">proxies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="s2">"proxies"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">proxy_setting</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"proxies"</span><span class="p">]:</span>
-            <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">proxy_setting</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">proxies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s2">"proxies"</span><span class="p">]</span> <span class="o">=</span> <span class="n">proxies</span>
+
+    <span class="k">if</span> <span class="n">moin_data</span><span class="p">:</span>
+        <span class="c1">#</span>
+        <span class="c1"># make the paths absolute</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">"_moin_data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">moin_data</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="c1"># get the proxies</span>
+        <span class="n">proxies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s2">"proxies"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">proxy_setting</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"proxies"</span><span class="p">]:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">proxy_setting</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">proxies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">"proxies"</span><span class="p">]</span> <span class="o">=</span> <span class="n">proxies</span>
     <span class="c1">#</span>
     <span class="c1"># build the context object</span>
     <span class="n">context</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -616,7 +623,7 @@ create_context<span class="p">(</span><span class="o">**</span><span class="n">k
             <span class="n">path</span><span class="o">=</span><span class="n">user_map</span><span class="p">,</span>
             <span class="n">logger</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">moin_data</span><span class="p">:</span>
         <span class="n">context</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="n">Moin2GitUserSet</span><span class="o">.</span><span class="n">load_users_from_wiki_data</span><span class="p">(</span>
             <span class="n">wiki_data_path</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">moin_data</span><span class="p">,</span>
             <span class="n">logger</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span>
