@@ -11,6 +11,10 @@ github, gitlab or gitea.
 
 Version: `0.7.0`
 
+## Status
+
+This was required for a one-off conversion. I'm not doing any further work on it - if anyone wishes to take this over then please just ask.
+
 ## Translation Method
 
 Originally the intention was to translate purely by converting the MoinMoin
@@ -23,7 +27,7 @@ too complex and fragile for this to work without a huge amount of special
 casing.
 
 So, after the revision structure is derived from the filesystem, each page
-revision is retrieved by http requests to the running MoinMoin wiki.  This is
+revision is retrieved by http requests to the running MoinMoin wiki. This is
 then reduced to just the page content (by picking out the content div from the
 html), and some light editing applied to simplify the HTML - specifically:-
 
@@ -45,20 +49,20 @@ This simplified HTML is then passed through the pandoc command:-
 And the resulting Github flavoured Markdown is taken as the new form.
 
 This handles the vast majority of normal markup correctly, including lists and
-many types of tables.  Some complicated markup or complex tables end up being
+many types of tables. Some complicated markup or complex tables end up being
 passed through as HTML - which displays correctly but is less easy to parse
 and edit.
 
 Attachments that are available in the wiki are also handled - they are put
 into a `_attachments` directory under a subdirectory named for the original
-page directory name.  Links to attachments should be handled correctly.
+page directory name. Links to attachments should be handled correctly.
 
 ## Issues
 
-The overall process is not particularly fast.  But this should be something
+The overall process is not particularly fast. But this should be something
 you only do once (or a few attempts) so raw speed is not needed.
 
-Attachments are not versioned by MoinMon.  This means any attachment that was
+Attachments are not versioned by MoinMon. This means any attachment that was
 deleted from MoinMoin is no longer available to put into the converted wiki.
 Any attachment that was updated a few times is only available in the last
 version (but will probably be inserted into the history at the point where it
@@ -89,4 +93,4 @@ the command can then be run as
 
 - Make tests effective
 
-----
+---
