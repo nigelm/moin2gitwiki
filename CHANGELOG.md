@@ -8,6 +8,8 @@ Unreleased Changes
 ------------------
 
 <!-- insertion marker -->
+[0.8.0] - 2023-04-24
+--------------------
 [0.7.0] - 2022-11-21
 --------------------
 - fix: remove hardwired proxy settings
