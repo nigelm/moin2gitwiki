@@ -78,7 +78,7 @@ class Moin2GitContext:
         if moin_data:
             #
             # make the paths absolute
-            kwargs["_moin_data"] = Path(moin_data).resolve(strict=True)
+            kwargs["moin_data"] = Path(moin_data).resolve(strict=True)
             #
             # get the proxies
             proxies: Dict[str, str] = {}
